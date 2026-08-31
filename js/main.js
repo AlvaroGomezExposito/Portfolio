@@ -217,7 +217,7 @@ function refreshModalText() {
   const en = currentLang === 'en';
   overlay.querySelector('.modal__cat').textContent   = (en && d.catEn)   ? d.catEn   : (d.cat   || '');
   overlay.querySelector('.modal__title').textContent = (en && d.titleEn) ? d.titleEn : (d.title || '');
-  overlay.querySelector('.modal__desc').textContent  = (en && d.descEn)  ? d.descEn  : (d.desc  || '');
+  overlay.querySelector('.modal__desc').innerHTML    = (en && d.descEn)  ? d.descEn  : (d.desc  || '');
   const modalLangBtn = document.getElementById('modalLangToggle');
   if (modalLangBtn) modalLangBtn.textContent = en ? 'ES' : 'EN';
   const dlText = overlay.querySelector('.gallery__download-text');
@@ -251,6 +251,9 @@ function applyLang() {
       titleEl.textContent = en && d.listTitleEn ? d.listTitleEn : (d.listTitle || titleEl.textContent);
     if (catEl && (d.catEs || d.catEn))
       catEl.textContent = en && d.catEn ? d.catEn : (d.catEs || catEl.textContent);
+    const descEl = item.querySelector('.project-item__desc');
+    if (descEl && d.listDescEn)
+      descEl.textContent = en ? d.listDescEn : descEl.textContent;
   });
   const btn = document.getElementById('langToggle');
   if (btn) btn.textContent = currentLang === 'es' ? 'EN' : 'ES';
@@ -348,6 +351,10 @@ function initModal() {
     return src.includes('youtube.com/embed');
   }
 
+  function isEmbed(src) {
+    return /\.html?$/i.test(src.split('|')[0]);
+  }
+
   function parseMedia(entry) {
     const parts = entry.split('|');
     const src = parts[0].trim();
@@ -366,6 +373,8 @@ function initModal() {
           iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [Math.round(volume * 100)] }), '*');
         });
       }
+    } else if (isEmbed(src)) {
+      fsMedia.innerHTML = `<iframe src="${src}" frameborder="0" allowfullscreen style="width:100%;height:100%;border:0;"></iframe>`;
     } else if (isVideo(src)) {
       fsMedia.innerHTML = `<video src="${src}" autoplay loop playsinline controls></video>`;
       if (volume !== null) { const v = fsMedia.querySelector('video'); if (v) v.volume = volume; }
@@ -436,6 +445,8 @@ function initModal() {
     if (isYoutube(src)) {
       const apParam = autoplay ? '?autoplay=1&enablejsapi=1' : '?enablejsapi=1';
       mediaEl = `<iframe src="${src}${apParam}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:0;"></iframe>`;
+    } else if (isEmbed(src)) {
+      mediaEl = `<iframe src="${src}" frameborder="0" allowfullscreen style="width:100%;height:100%;border:0;"></iframe>`;
     } else if (isVideo(src)) {
       const muted = volume === null ? 'muted' : '';
       const apAttr = autoplay ? 'autoplay' : '';
@@ -489,7 +500,7 @@ function initModal() {
     const en = currentLang === 'en';
     overlay.querySelector('.modal__cat').textContent   = (en && data.catEn)   ? data.catEn   : (data.cat   || '');
     overlay.querySelector('.modal__title').textContent = (en && data.titleEn) ? data.titleEn : (data.title || '');
-    overlay.querySelector('.modal__desc').textContent  = (en && data.descEn)  ? data.descEn  : (data.desc  || '');
+    overlay.querySelector('.modal__desc').innerHTML    = (en && data.descEn)  ? data.descEn  : (data.desc  || '');
     const modalLangBtn = document.getElementById('modalLangToggle');
     if (modalLangBtn) modalLangBtn.textContent = en ? 'ES' : 'EN';
     const mediaWrap = overlay.querySelector('.modal__media');
@@ -528,6 +539,7 @@ function initModal() {
   }, { passive: true });
   galleryMediaEl.addEventListener('touchend', e => {
     if (!galleryState) return;
+    if (isEmbed(parseMedia(galleryState.imgs[galleryState.idx]).src)) return;
     const dx = e.changedTouches[0].clientX - swipeStartX;
     if (Math.abs(dx) < 50) return;
     const title = overlay.querySelector('.modal__title').textContent;
@@ -544,6 +556,7 @@ function initModal() {
       fsTouchX = e.touches[0].clientX;
     }, { passive: true });
     fullscreenEl.addEventListener('touchend', e => {
+      if (fullscreenState && isEmbed(parseMedia(fullscreenState.imgs[fullscreenState.idx]).src)) return;
       const dx = e.changedTouches[0].clientX - fsTouchX;
       if (Math.abs(dx) < 50) return;
       dx < 0 ? navigateFullscreen(1) : navigateFullscreen(-1);
@@ -616,11 +629,11 @@ function initHeroSlideshow() {
   const fillEl = document.getElementById('heroProgressFill');
 
   const PROJECTS = [
-    { cat: '3D / Arquitectura',      catEn: '3D / Architecture',     name: 'Exposición de Vivienda',               nameEn: 'Housing Exhibition',                   idx: 0 },
-    { cat: 'Arte Digital / Fan Art', catEn: 'Digital Art / Fan Art', name: 'Nuka-Cola: Holiday Spirit Never Ends', nameEn: 'Nuka-Cola: Holiday Spirit Never Ends', idx: 1 },
-    { cat: '3D / Motion',            catEn: '3D / Motion',           name: 'Anuncio Educativo ESCALA',             nameEn: 'ESCALA Educational Ad',                idx: 2 },
-    { cat: 'Arte Digital / Fan Art', catEn: 'Digital Art / Fan Art', name: 'Dettlaff — Fan Art',                   nameEn: 'Dettlaff — Fan Art',                   idx: 3 },
-    { cat: '3D / Motion',            catEn: '3D / Motion',           name: 'Anuncio Conceptual Canon',             nameEn: 'Conceptual Canon Ad',                  idx: 4 },
+    { cat: '3D / Arquitectura',      catEn: '3D / Architecture',     name: 'Exposición de Vivienda',               nameEn: 'Housing Exhibition',                   idx: 1 },
+    { cat: 'Arte Digital / Fan Art', catEn: 'Digital Art / Fan Art', name: 'Nuka-Cola: Holiday Spirit Never Ends', nameEn: 'Nuka-Cola: Holiday Spirit Never Ends', idx: 2 },
+    { cat: '3D / Motion',            catEn: '3D / Motion',           name: 'Anuncio Educativo ESCALA',             nameEn: 'ESCALA Educational Ad',                idx: 3 },
+    { cat: 'Arte Digital / Fan Art', catEn: 'Digital Art / Fan Art', name: 'Dettlaff — Fan Art',                   nameEn: 'Dettlaff — Fan Art',                   idx: 4 },
+    { cat: '3D / Motion',            catEn: '3D / Motion',           name: 'Anuncio Conceptual Canon',             nameEn: 'Conceptual Canon Ad',                  idx: 5 },
   ];
 
   const DURATION = 5000;

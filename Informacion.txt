@@ -1,6 +1,6 @@
 PORTFOLIO WEB — Documento de referencia
 
-Álvaro Gómez Expósito · Actualizado: junio 2026 (sesión 4)
+Álvaro Gómez Expósito · Actualizado: agosto 2026 (sesión 5)
 
 1. INFORMACIÓN DEL PROYECTO
 
@@ -52,7 +52,7 @@ Otros tokens de color:
 Navegación entre páginas con nav fijo y menú hamburguesa en móvil
 Toggle de idioma ES / EN con persistencia en localStorage — todas las secciones traducidas
 Filtros de proyectos por categoría (3D, Arte digital, Games)
-Modal lightbox para ver proyectos en detalle (soporta imagen, galería, vídeo e iframe YouTube)
+Modal lightbox para ver proyectos en detalle (soporta imagen, galería, vídeo, iframe YouTube e iframe embed)
   - Galería con flechas ‹ › y contador X / N dentro del modal
   - Botón de idioma ES/EN dentro del modal (cambia título, categoría y descripción)
   - Clic en imagen del modal → visor a pantalla completa
@@ -60,6 +60,7 @@ Modal lightbox para ver proyectos en detalle (soporta imagen, galería, vídeo e
   - Sincronización de índice entre modal y pantalla completa
   - Soporte de vídeos YouTube: iframes con autoplay y control de volumen vía postMessage
   - Control de volumen por elemento en data-gallery: sufijo |vol:0.85 (escala 0–1)
+  - Soporte de embeds locales (HTML): iframes sin parámetros YouTube, para Marmoset Viewer u otros
 Auto-apertura de modal desde URL: projects.html?open=N abre el proyecto en posición N (0-based)
   - La URL se limpia tras abrir el modal (history.replaceState)
   - Usado por los trabajos recientes de index.html para enlazar al proyecto correcto
@@ -86,25 +87,47 @@ Swipe táctil en galería del modal (navegación entre archivos del proyecto)
   - Listeners sobre el elemento .modal__media (persisten entre re-renders de galería)
   - Compatible con las flechas ‹ › y las teclas ← → ya existentes
   - Implementado en initModal() con touchstart + touchend { passive: true }
+  - Los ítems de tipo embed (Marmoset) no activan navegación por swipe — la interacción
+    de rotar el modelo no interfiere con el cambio de slide
 Swipe táctil en visor fullscreen
   - Misma lógica: deslizar izquierda → siguiente; derecha → anterior
   - Llama a navigateFullscreen(±1) con umbral 50px
+  - Misma guarda para embeds: el swipe no navega si el ítem actual es un embed
 Botón de cerrar modal (✕) en color gris azulado frío #b0c4d8 para mayor visibilidad
 Analytics Umami integrado en los 5 HTML
   - Script: <script defer src="https://cloud.umami.is/script.js" data-website-id="84b20424-426c-4b66-8ffb-ea98c5c36936">
   - Añadido justo antes del </head> en: index.html · about.html · contact.html · projects.html · skills.html
+Descripción del modal renderizada con .innerHTML (no .textContent) → permite enlaces HTML dentro de data-desc
+  - .modal__desc a { color: var(--accent); text-decoration: underline; }
+  - .modal__desc a:hover { opacity: 0.8; }
 
 
-5. PROYECTOS EN projects.html  (orden actual)
+5. PROYECTOS EN projects.html  (orden actual — 6 proyectos)
 
-Proyecto 1 — Exposición de Vivienda · Corona Renderer  (3D / Arquitectura)
+Proyecto 1 — Robot Armado  (3D / Motion)  ⚠ PENDIENTE DE ASSETS
+  Carpeta img:   assets/img/robot-armado/   (no existe aún — TODO placeholders)
+  Carpeta embed: assets/marmoset/robot-armado/  (no existe aún — TODO placeholder)
+  Portada:       assets/img/robot-armado/TODO-cover.webp
+  Galería (5 entradas, en orden):
+    1. YouTube (vídeo presentación final):    https://www.youtube.com/embed/TODO-video1
+    2. Marmoset Viewer embed (local HTML):    assets/marmoset/robot-armado/TODO-index.html
+    3. YouTube (vídeo capas/layers):          https://www.youtube.com/embed/TODO-video3
+    4. YouTube (skinning + animación):        https://www.youtube.com/embed/TODO-video4
+    5. Imagen UDIM/UV layout:                 assets/img/robot-armado/TODO-udims.webp
+  data-download-links: ",,,,  " (5 entradas vacías — se rellenarán con Drive links cuando existan)
+  Subtítulo: Blender · 3ds Max · Tyflow · RizomUV · Substance 3D Painter · Marmoset Toolbag · After Effects
+  Descripción: escrita en ES y EN · enlace clicable a Sketchfab del entorno (archiwum_xyz)
+  Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
+  ⚠ NO incluido aún en el hero slideshow ni en "trabajos recientes" de index.html (requiere imagen real)
+
+Proyecto 2 — Exposición de Vivienda · Corona Renderer  (3D / Arquitectura)
   Carpeta: assets/img/exposicion-vivienda/
   Galería (6 imgs): Artstation, Artstation2, ArtstationHamacasReducido,
                     MuestraPorche5, ArtstationJardin, ArtstationPiscina
   Subtítulo: Visualización arquitectónica · 3ds Max · Corona Renderer (#c9a87c)
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
 
-Proyecto 2 — Nuka-Cola: Holiday Spirit Never Ends  (Arte Digital / Fan Art)
+Proyecto 3 — Nuka-Cola: Holiday Spirit Never Ends  (Arte Digital / Fan Art)
   Carpeta img: assets/img/nuka-cola/
   Miniatura: PruebaPortada.webp (con fondo desenfocado, object-fit:contain)
   Galería (11 elementos + 2 YouTube):
@@ -117,7 +140,7 @@ Proyecto 2 — Nuka-Cola: Holiday Spirit Never Ends  (Arte Digital / Fan Art)
   Subtítulo: 3ds Max · Arnold Renderer · TyFlow · ZBrush · After Effects (#c9a87c)
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
 
-Proyecto 3 — Anuncio Educativo ESCALA  (3D / Motion)
+Proyecto 4 — Anuncio Educativo ESCALA  (3D / Motion)
   Carpeta: assets/img/escala-anuncio/
   Miniatura: MiniaturaYoutube.webp (con fondo desenfocado, object-fit:contain)
   Galería (9 imgs + 1 YouTube): RenderPrincipalMejorado, RenderArbustos, Columnas,
@@ -126,7 +149,7 @@ Proyecto 3 — Anuncio Educativo ESCALA  (3D / Motion)
                     YouTube: https://www.youtube.com/embed/EIJ1bnA1PxU (último)
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
 
-Proyecto 4 — Dettlaff van der Eretein — Fan Art  (Arte Digital / Fan Art)
+Proyecto 5 — Dettlaff van der Eretein — Fan Art  (Arte Digital / Fan Art)
   Carpeta img: assets/img/dettlaff-fanart/
   Galería (3 imgs + 1 YouTube): render_Viewport_001, render_Viewport_002,
                                ReferenciasVampiro,
@@ -134,7 +157,7 @@ Proyecto 4 — Dettlaff van der Eretein — Fan Art  (Arte Digital / Fan Art)
   The Witcher 3: Blood and Wine · referencia: busto de Marcin Blaszczak
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
 
-Proyecto 5 — Anuncio Conceptual Canon  (3D / Motion)
+Proyecto 6 — Anuncio Conceptual Canon  (3D / Motion)
   Carpeta img: assets/img/anuncio-canon/
   Galería (4 imgs + 1 YouTube): alvaro-gomez-1mejora, alvaro-gomez-2mejora,
                                alvaro-gomez-3mejora, alvaro-gomez-4mejora,
@@ -146,8 +169,8 @@ Proyecto 5 — Anuncio Conceptual Canon  (3D / Motion)
 6. INICIO — HERO SLIDESHOW (index.html, columna derecha)
 
 El hero de index.html muestra en la columna derecha un slideshow automático que cicla por los
-5 proyectos del portfolio. Implementado como <a id="heroSlideLink"> con clase hero__img-wrap
-y hero__slideshow. Controlado por initHeroSlideshow() en js/main.js.
+5 proyectos del portfolio con assets reales. Implementado como <a id="heroSlideLink"> con clase
+hero__img-wrap y hero__slideshow. Controlado por initHeroSlideshow() en js/main.js.
 
 Comportamiento:
   - Cada slide se muestra 5 segundos (DURATION = 5000 ms) con transición crossfade (opacity 0.8s)
@@ -161,28 +184,28 @@ Comportamiento:
   - Caption bilingüe: se actualiza automáticamente al cambiar idioma ES/EN
   - En móvil (<900px) el hero visual está oculto (display:none); el slideshow no afecta
 
-Slides (en orden):
-  Slide 1 — Exposición de Vivienda  →  projects.html?open=0
+Slides (en orden) — Robot Armado NO está incluido aún (sin imagen real):
+  Slide 1 — Exposición de Vivienda  →  projects.html?open=1
     img:    assets/img/exposicion-vivienda/Artstation.webp
     modo:   object-fit:contain + fondo blur (hero__slide-blur) + position:relative en img
     cat ES/EN: 3D / Arquitectura · 3D / Architecture
 
-  Slide 2 — Nuka-Cola: Holiday Spirit Never Ends  →  projects.html?open=1
+  Slide 2 — Nuka-Cola: Holiday Spirit Never Ends  →  projects.html?open=2
     img:    assets/img/nuka-cola/PruebaPortada.webp  (archivo nº 11 de la galería)
     modo:   object-fit:contain + fondo blur (hero__slide-blur) + position:relative en img
     cat ES/EN: Arte Digital / Fan Art · Digital Art / Fan Art
 
-  Slide 3 — Anuncio Educativo ESCALA  →  projects.html?open=2
+  Slide 3 — Anuncio Educativo ESCALA  →  projects.html?open=3
     img:    assets/img/escala-anuncio/MiniaturaYoutube.webp
     modo:   object-fit:contain + fondo blur (hero__slide-blur) + position:relative en img
     cat ES/EN: 3D / Motion · 3D / Motion
 
-  Slide 4 — Dettlaff — Fan Art  →  projects.html?open=3
+  Slide 4 — Dettlaff — Fan Art  →  projects.html?open=4
     img:    assets/img/dettlaff-fanart/render_Viewport_001.webp
     modo:   object-fit:cover (sin espacios vacíos, sin blur)
     cat ES/EN: Arte Digital / Fan Art · Digital Art / Fan Art
 
-  Slide 5 — Anuncio Conceptual Canon  →  projects.html?open=4
+  Slide 5 — Anuncio Conceptual Canon  →  projects.html?open=5
     img:    assets/img/anuncio-canon/alvaro-gomez-4mejora.webp  (archivo nº 4 de la galería)
     modo:   object-fit:contain + fondo blur (hero__slide-blur) + position:relative en img
     cat ES/EN: 3D / Motion · 3D / Motion
@@ -200,18 +223,19 @@ vacíos. El img necesita position:relative para pintarse encima del blur en el o
 
 Muestra los 3 primeros proyectos de projects.html con imagen real de portada.
 Cada tarjeta enlaza a projects.html?open=N (N = posición 0-based) para abrir el modal directo.
+Robot Armado (índice 0) NO aparece aquí todavía — sin imagen real.
 
   Tarjeta 1 → Exposición de Vivienda
     img: assets/img/exposicion-vivienda/Artstation.webp  (object-fit:cover)
-    href: projects.html?open=0
+    href: projects.html?open=1
 
   Tarjeta 2 → Nuka-Cola: Holiday Spirit Never Ends
     img: assets/img/nuka-cola/PruebaPortada.webp  (fondo blur + object-fit:contain)
-    href: projects.html?open=1
+    href: projects.html?open=2
 
   Tarjeta 3 → Anuncio Educativo ESCALA
     img: assets/img/escala-anuncio/MiniaturaYoutube.webp  (fondo blur + object-fit:contain)
-    href: projects.html?open=2
+    href: projects.html?open=3
 
 
 8. INICIO — STATS DEL HERO (index.html)
@@ -225,6 +249,8 @@ Cada tarjeta enlaza a projects.html?open=N (N = posición 0-based) para abrir el
 
 assets/
 ├── img/
+│   ├── robot-armado/          ⚠ NO EXISTE AÚN — pendiente de assets reales
+│   │                            (TODO-cover.webp, TODO-udims.webp)
 │   ├── exposicion-vivienda/   (6 imágenes .webp + originales .png)
 │   ├── escala-anuncio/        (10 archivos .webp + originales: 9 galería + 1 miniatura YouTube)
 │   ├── anuncio-canon/         (4 imágenes .webp + originales .jpg)
@@ -237,6 +263,9 @@ assets/
 │
 │   NOTA: Todos los HTML usan las versiones .webp de las imágenes de proyectos.
 │   Los originales .png/.jpg se conservan en las mismas carpetas.
+├── marmoset/
+│   └── robot-armado/          ⚠ NO EXISTE AÚN — pendiente del export de Marmoset Toolbag
+│                                (TODO-index.html — bundle HTML+JS+WebGL del visor interactivo)
 ├── videos/
 │   ├── escala-anuncio/        LetrasBlancas.mp4 (archivo local; en web se usa YouTube embed)
 │   ├── anuncio-canon/         ComposicionFinalPresentacion.mp4 (archivo local; en web se usa YouTube embed)
@@ -246,14 +275,16 @@ assets/
 └── documents/
     └── CV/                    CV_ALVARO_GOMEZ_2026.pdf ✓
 
-Para añadir imágenes a un proyecto:
+Para añadir imágenes/media a un proyecto:
 1. Colocar los archivos .webp en su carpeta correspondiente (assets/img/<proyecto>/)
 2. Los vídeos van en assets/videos/<proyecto>/ o como enlaces YouTube embed
 3. Añadir data-img="ruta" y data-gallery="ruta1,ruta2,..." al div .project-item
 4. Para YouTube: usar URL https://www.youtube.com/embed/VIDEO_ID (con |vol:0.X opcional)
-5. Para miniatura con fondo desenfocado: añadir div.hero__slide-blur + img con object-fit:contain + position:relative
-6. Añadir data-download-links="url1,url2,..." con una URL de Google Drive por entrada de galería
-   (cadena vacía para entradas YouTube/vídeo, URL real para imágenes)
+5. Para Marmoset Viewer u otros embeds HTML: usar ruta local .html → se detecta por extensión
+   y se renderiza como <iframe> sin parámetros YouTube (función isEmbed() en js/main.js)
+6. Para miniatura con fondo desenfocado: añadir div.hero__slide-blur + img con object-fit:contain + position:relative
+7. Añadir data-download-links="url1,url2,..." con una URL de Google Drive por entrada de galería
+   (cadena vacía para entradas YouTube/vídeo/embed, URL real para imágenes)
 
 
 10. SECCIONES DE HABILIDADES EN skills.html
@@ -329,19 +360,21 @@ Completado:
   ✓ Estructura completa de 5 páginas
   ✓ Tipografías: Bebas Neue + Cormorant Garamond + Raleway
   ✓ Colores de acento por sección aplicados
-  ✓ 5 proyectos completos en galería con imágenes reales, galería funcional y bilingüismo
+  ✓ 6 proyectos en galería (5 completos con assets reales + 1 pendiente de assets)
   ✓ Sistema de galería con slider, zoom a pantalla completa y navegación por teclado
   ✓ Soporte de vídeo (mp4) e iframes YouTube con control de volumen
+  ✓ Soporte de embeds HTML locales (Marmoset Viewer) como nuevo tipo de media en galería
   ✓ Todos los vídeos de todos los proyectos servidos como YouTube embed (no archivos locales)
   ✓ Visor fullscreen: al navegar con flechas a un vídeo, el zoom se desactiva automáticamente
       y el vídeo se reproduce en el modal (evita que el iframe aparezca diminuto en el overlay)
   ✓ Corrección bug doble reproducción: renderGallery acepta parámetro autoplay (default true);
       cuando se llama desde navegación fullscreen se pasa false para no reproducir en el modal
   ✓ Toggle de idioma dentro del modal (ES/EN por proyecto)
-  ✓ Orden de proyectos: Vivienda · Nuka-Cola · ESCALA · Dettlaff · Canon
-  ✓ Hero slideshow en index.html: 5 proyectos con ciclo automático de 5s, crossfade, barra de progreso,
-      dots de navegación, pausa/reanudación en hover, enlace al proyecto visible, caption bilingüe
-  ✓ Trabajos recientes de index.html con imágenes reales y enlaces directos a modal (projects.html?open=N)
+  ✓ Orden de proyectos: Robot Armado · Vivienda · Nuka-Cola · ESCALA · Dettlaff · Canon
+  ✓ Hero slideshow en index.html: 5 proyectos con assets reales, ciclo automático de 5s, crossfade,
+      barra de progreso, dots de navegación, pausa/reanudación en hover, enlace al proyecto visible,
+      caption bilingüe · idx 1–5 (Robot Armado en idx 0 pendiente de imagen real)
+  ✓ Trabajos recientes de index.html con imágenes reales y enlaces directos a modal (open=1/2/3)
   ✓ Footer con links correctos: ArtStation · GitHub · LinkedIn
   ✓ Foto personal en about.html
   ✓ Timeline "Experiencia y Formación" actualizado (Outlander Games · ESCALA · UDIT)
@@ -353,10 +386,37 @@ Completado:
   ✓ Carrusel horizontal en projects.html para móvil/tablet (scroll-snap + dots)
   ✓ Swipe táctil en galería del modal (navegar entre archivos de cada proyecto)
   ✓ Swipe táctil en visor fullscreen
+  ✓ Descripción del modal renderizada con .innerHTML → permite enlaces HTML en data-desc/data-desc-en
+  ✓ Estilo de enlace en descripción: color acento + subrayado + hover opacidad
+  ✓ Subtítulo de Exposición de Vivienda traducible al inglés (data-list-desc-en)
 
-Pendiente:
+Pendiente (Robot Armado):
+  ▸ Crear carpeta assets/img/robot-armado/ con imagen de portada y UDIM layout (.webp)
+  ▸ Crear carpeta assets/marmoset/robot-armado/ con el export del visor interactivo de Marmoset
+  ▸ Subir vídeos a YouTube y reemplazar los TODO-videoN en data-gallery
+  ▸ Añadir enlaces de Google Drive en data-download-links (al menos para la imagen UDIM)
+  ▸ Añadir Robot Armado al hero slideshow de index.html (slide + entrada en PROJECTS[])
+  ▸ Añadir Robot Armado a "trabajos recientes" de index.html
+
+Pendiente (general):
   ▸ Integrar formulario de contacto con servicio real (Formspree / Web3Forms)
   ▸ Subir a Netlify / dominio propio
+
+Novedades sesión 5 (agosto 2026):
+  ✓ Nuevo proyecto "Robot Armado" añadido como PROJECT 1 en projects.html
+      — Insertado antes de Exposición de Vivienda; los demás proyectos pasan a índices 1–5
+      — Galería de 5 entradas: YouTube x3, Marmoset embed, imagen UDIM (todas con TODO placeholders)
+      — Descripción completa en ES y EN con enlace clicable a Sketchfab del entorno (archiwum_xyz)
+      — data-download-links: 5 entradas vacías listas para rellenar con Drive links
+  ✓ Soporte de Marmoset Viewer como nuevo tipo de media en la galería del modal
+      — isEmbed(src): detecta rutas .html/.htm
+      — Renderizado como <iframe> sin parámetros YouTube en renderGallery() y setFsMedia()
+      — Swipe guard en modal y fullscreen: el drag sobre el embed no activa cambio de slide
+  ✓ Descripción del modal cambiada de .textContent a .innerHTML (refreshModalText + openModal)
+      — Permite enlaces <a> dentro de data-desc y data-desc-en
+      — Estilo añadido en style.css: .modal__desc a y .modal__desc a:hover
+  ✓ index.html recent-works links actualizados: open=1 / open=2 / open=3
+  ✓ js/main.js PROJECTS[] idx actualizados: 1 / 2 / 3 / 4 / 5 (por la inserción de Robot Armado en 0)
 
 Novedades sesión 4 (junio 2026):
   ✓ Swipe táctil en galería del modal — navegar entre imágenes/vídeos de cada proyecto deslizando
@@ -413,7 +473,9 @@ Traducciones: objeto TRANSLATIONS en js/main.js, atributo data-i18n en HTML
 Auto-apertura de modal: projects.html?open=N → abre proyecto índice N; URL se limpia con history.replaceState
 Galería de imágenes: atributo data-gallery con rutas separadas por coma
   - Vídeos HTML5 (.mp4/.webm): se renderizan como <video autoplay muted loop playsinline>
-  - Vídeos YouTube: URL https://www.youtube.com/embed/ID → se renderizan como <iframe>
+  - Vídeos YouTube: URL https://www.youtube.com/embed/ID → se renderizan como <iframe> con autoplay
+  - Embeds locales (.html/.htm): detectados por isEmbed() → <iframe> sin parámetros YouTube
+    · Marmoset Toolbag Viewer export: HTML+JS+WebGL; el drag rota el modelo sin activar swipe nav
   - Control de volumen: sufijo |vol:0.85 en la ruta (YouTube via postMessage, HTML5 via .volume)
 Miniatura con fondo desenfocado: div.hero__slide-blur (position:absolute, filter:blur(18px) brightness(0.35))
   + img con object-fit:contain y position:relative (position:relative es obligatorio para que el img
@@ -421,5 +483,8 @@ Miniatura con fondo desenfocado: div.hero__slide-blur (position:absolute, filter
 Hero slideshow: función initHeroSlideshow() en js/main.js; window._heroSlideshowUpdateLang() para
   actualizar el caption al cambiar idioma; usa setTimeout (no setInterval) para poder reanudar
   desde el tiempo exacto tras un hover
+Modal description: .modal__desc usa .innerHTML (no .textContent) para renderizar enlaces HTML
+  dentro de data-desc/data-desc-en. Los demás campos del modal (.modal__cat, .modal__title) siguen
+  usando .textContent ya que no contienen HTML.
 About page: columna foto 0.6fr · aspect-ratio 3/3.5 · textos 1.1rem / 1.18rem · timeline ampliado
 Hosting recomendado: Netlify Drop (gratis) + dominio .com o .art (~10€/año)
