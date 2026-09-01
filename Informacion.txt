@@ -1,6 +1,6 @@
 PORTFOLIO WEB — Documento de referencia
 
-Álvaro Gómez Expósito · Actualizado: agosto 2026 (sesión 5)
+Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 6)
 
 1. INFORMACIÓN DEL PROYECTO
 
@@ -329,9 +329,10 @@ Claves por sección:
     about.exp             → "Experiencia y Formación" / "Experience & Education"
     about.exp.r1/r2/r3    → Roles del timeline
     about.exp.c1/c2/c3    → Empresas/centros del timeline
-    about.interests       → "Intereses" / "Interests"
-    about.tag.emulation   → "PS3 / Emulación" / "PS3 / Emulation"
-    about.tag.audio       → "Síntesis de audio" / "Audio Synthesis"
+    about.philosophy      → "Filosofía de trabajo" / "Work Philosophy"
+    about.tag.*           → 11 atributos de filosofía de trabajo (curiosity, improvement,
+                              research, openness, experimentation, resourceful, adaptability,
+                              detail, versatility, proactivity, passion3d)
     about.cv              → Botón descargar CV
   contact.*      → Contacto completo:
     contact.eyebrow/title/sub  → Cabecera
@@ -401,6 +402,17 @@ Pendiente (Robot Armado):
 Pendiente (general):
   ▸ Integrar formulario de contacto con servicio real (Formspree / Web3Forms)
   ▸ Subir a Netlify / dominio propio
+
+Novedades sesión 6 (septiembre 2026):
+  ✓ Sección "Intereses" de about.html renombrada a "Filosofía de trabajo"
+      — Los 7 tags anteriores (Retro gaming, PS3/Emulación, Worldbuilding, Concept Art,
+        Open source, Pixel art, Síntesis de audio) sustituidos por 11 nuevos atributos:
+        Curiosidad técnica · Mentalidad de mejora continua · Investigación autónoma ·
+        Apertura a nuevas herramientas y tecnologías · Experimentación e iteración ·
+        Resolutivo · Adaptabilidad ante nuevos retos · Atención al detalle ·
+        Versatilidad · Proactividad · Pasión por el desarrollo 3D y la tecnología
+      — Clave i18n renombrada: about.interests → about.philosophy
+      — Nuevas claves about.tag.* con traducción ES/EN completa en js/main.js
 
 Novedades sesión 5 (agosto 2026):
   ✓ Nuevo proyecto "Robot Armado" añadido como PROJECT 1 en projects.html
