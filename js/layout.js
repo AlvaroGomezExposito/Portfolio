@@ -44,7 +44,7 @@
           <p class="footer__copy" data-i18n="footer.copy">© 2025 Álvaro Gómez Expósito. Todos los derechos reservados.</p>
           <div class="footer__links">
             <a href="https://alvatrom.artstation.com/"                        target="_blank" rel="noopener">ArtStation</a>
-            <a href="https://github.com/Alvatrom"                             target="_blank" rel="noopener">GitHub</a>
+            <a href="https://github.com/AlvaroGomezExposito"                             target="_blank" rel="noopener">GitHub</a>
             <a href="https://www.linkedin.com/in/alvaro-gomez-exposito-3d"   target="_blank" rel="noopener">LinkedIn</a>
           </div>
         </div>

@@ -105,6 +105,7 @@ const TRANSLATIONS = {
     'contact.msg':              'Mensaje',
     'contact.send':             'Enviar mensaje →',
     'contact.success':          'Mensaje enviado. ¡Te contesto pronto!',
+    'contact.error':            'No se pudo enviar el mensaje. Prueba de nuevo o escríbeme directamente a alvarogomez0402@gmail.com',
     'contact.cv.val':           'Descargar CV (PDF)',
     'contact.availability':     'Disponibilidad',
     'contact.available':        'Disponible para proyectos',
@@ -214,6 +215,7 @@ const TRANSLATIONS = {
     'contact.msg':              'Message',
     'contact.send':             'Send message →',
     'contact.success':          'Message sent. I\'ll get back to you soon!',
+    'contact.error':            'Couldn\'t send the message. Try again or email me directly at alvarogomez0402@gmail.com',
     'contact.cv.val':           'Download CV (PDF)',
     'contact.availability':     'Availability',
     'contact.available':        'Available for projects',
@@ -743,18 +745,45 @@ function initHeroSlideshow() {
   scheduleNext(DURATION);
 }
 
-// ── Contact form (demo) ──────────────────────────────────────
+// ── Contact form (Google Apps Script + Gmail) ──────────────────
+// URL del Web App desplegado en script.google.com (ver apps-script/Code.gs).
+// Si se crea una implementación nueva (no solo una nueva versión), esta
+// URL cambia y hay que actualizarla aquí.
+const CONTACT_FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzQrNW2uInzSoJiPdO883zCqjnWyGqPFPem8_q3FMtar63xoZsTv7QLOjGVvJdXKkvJPg/exec';
+
 function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
+
   form.addEventListener('submit', e => {
     e.preventDefault();
     const success = document.getElementById('formSuccess');
-    if (success) {
-      success.style.display = 'block';
-      form.reset();
-      setTimeout(() => { success.style.display = 'none'; }, 5000);
-    }
+    const error = document.getElementById('formError');
+    if (error) error.style.display = 'none';
+
+    const formData = new FormData(form);
+
+    // Apps Script Web Apps no soportan CORS estándar, así que la
+    // petición se hace en modo 'no-cors': el navegador no deja leer
+    // la respuesta, pero el envío llega igualmente al script.
+    fetch(CONTACT_FORM_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData,
+    })
+      .then(() => {
+        if (success) {
+          success.style.display = 'block';
+          form.reset();
+          setTimeout(() => { success.style.display = 'none'; }, 5000);
+        }
+      })
+      .catch(() => {
+        if (error) {
+          error.style.display = 'block';
+          setTimeout(() => { error.style.display = 'none'; }, 6000);
+        }
+      });
   });
 }
 

@@ -1,6 +1,6 @@
 PORTFOLIO WEB — Documento de referencia
 
-Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 6)
+Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 7)
 
 1. INFORMACIÓN DEL PROYECTO
 
@@ -23,6 +23,7 @@ about.html    → Sobre mí: bio, foto, timeline "Experiencia y Formación" y CV
 contact.html  → Contacto: formulario + links a redes y CV
 
 Archivos principales: css/style.css · js/main.js · js/layout.js (nav y footer compartidos)
+Backend contacto: apps-script/Code.gs (referencia; se despliega manualmente en script.google.com — ver sección 16)
 
 
 3. DISEÑO VISUAL
@@ -69,9 +70,11 @@ Subtítulos de proyectos en color Arena dorada #c9a87c para mayor visibilidad (i
 Barras de habilidades animadas al hacer scroll
 Niveles de habilidad estandarizados: Básico 30% · Intermedio 50% · Intermedio-Avanzado 60% · Avanzado 85% · Muy Avanzado 95%
 Logos reales de programas en skill cards desde assets/img/logos/
-Formulario de contacto con mensaje de éxito (sin backend real aún)
+Formulario de contacto con envío real vía Google Apps Script + Gmail (MailApp.sendEmail)
+  - Mensajes de éxito (#formSuccess) y error de red (#formError), ambos bilingües
+  - Ver sección 16 para detalles del endpoint
 Footer compartido inyectado via js/layout.js — links correctos: ArtStation · GitHub · LinkedIn
-Links del footer: alvatrom.artstation.com · github.com/Alvatrom · linkedin.com/in/alvaro-gomez-exposito-3d
+Links del footer: alvatrom.artstation.com · github.com/AlvaroGomezExposito · linkedin.com/in/alvaro-gomez-exposito-3d
 Indicador de disponibilidad (punto verde animado) en contact.html
 Responsive: adaptado a móvil y tablet (hero visual oculto en <900px)
 Carrusel horizontal de proyectos en móvil/tablet (≤768px): deslizamiento lateral con CSS scroll-snap
@@ -308,7 +311,7 @@ Escala de barras: Básico 30% · Intermedio 50% · Intermedio-Avanzado 60% · Av
 Email:      alvarogomez0402@gmail.com
 LinkedIn:   linkedin.com/in/alvaro-gomez-exposito-3d
 ArtStation: alvatrom.artstation.com
-GitHub:     github.com/Alvatrom
+GitHub:     github.com/AlvaroGomezExposito
 CV:         assets/documents/CV/CV_ALVARO_GOMEZ_2026.pdf
 
 Estos mismos enlaces están en el footer (js/layout.js) y en contact.html.
@@ -390,6 +393,9 @@ Completado:
   ✓ Descripción del modal renderizada con .innerHTML → permite enlaces HTML en data-desc/data-desc-en
   ✓ Estilo de enlace en descripción: color acento + subrayado + hover opacidad
   ✓ Subtítulo de Exposición de Vivienda traducible al inglés (data-list-desc-en)
+  ✓ Formulario de contacto desplegado en producción vía Google Apps Script + Gmail
+      — Web App desplegado el 3 sept 2026; URL activa pegada en js/main.js (CONTACT_FORM_ENDPOINT)
+      — Código fuente de referencia en apps-script/Code.gs
 
 Pendiente (Robot Armado):
   ▸ Crear carpeta assets/img/robot-armado/ con imagen de portada y UDIM layout (.webp)
@@ -400,8 +406,21 @@ Pendiente (Robot Armado):
   ▸ Añadir Robot Armado a "trabajos recientes" de index.html
 
 Pendiente (general):
-  ▸ Integrar formulario de contacto con servicio real (Formspree / Web3Forms)
   ▸ Subir a Netlify / dominio propio
+
+Novedades sesión 7 (septiembre 2026):
+  ✓ Formulario de contacto conectado a un backend real: Google Apps Script + Gmail
+      — Nuevo apps-script/Code.gs: doPost(e) recibe name/email/msg y envía email a
+        alvarogomez0402@gmail.com vía MailApp.sendEmail, con replyTo al remitente
+      — initContactForm() (js/main.js) ahora hace fetch POST con FormData en modo
+        'no-cors' contra CONTACT_FORM_ENDPOINT, en vez de simular el envío
+      — Nuevo mensaje de error de red #formError (bilingüe, clave contact.error) junto
+        al #formSuccess existente; estilo .form-error añadido en style.css
+      — Web App desplegado por el usuario en script.google.com y en producción desde
+        el 3 sept 2026; URL pegada en CONTACT_FORM_ENDPOINT
+  ✓ Corregido enlace de GitHub roto: github.com/Alvatrom → github.com/AlvaroGomezExposito
+      — Actualizado en contact.html (href + texto visible), footer compartido
+        (js/layout.js) y en este documento (secciones 4 y 11)
 
 Novedades sesión 6 (septiembre 2026):
   ✓ Sección "Intereses" de about.html renombrada a "Filosofía de trabajo"
@@ -500,3 +519,17 @@ Modal description: .modal__desc usa .innerHTML (no .textContent) para renderizar
   usando .textContent ya que no contienen HTML.
 About page: columna foto 0.6fr · aspect-ratio 3/3.5 · textos 1.1rem / 1.18rem · timeline ampliado
 Hosting recomendado: Netlify Drop (gratis) + dominio .com o .art (~10€/año)
+
+Formulario de contacto (backend): código fuente de referencia en apps-script/Code.gs
+  (doPost recibe name/email/msg y envía email vía MailApp a alvarogomez0402@gmail.com
+  con replyTo = email del remitente). Ese archivo NO se ejecuta desde el repo — se copia
+  manualmente en script.google.com y se despliega ahí como Web App.
+  URL del despliegue activo: pegada en js/main.js, constante CONTACT_FORM_ENDPOINT
+  (desplegado y en producción desde el 3 sept 2026).
+  Envío desde el navegador: fetch POST con FormData en modo 'no-cors' (initContactForm(),
+  js/main.js) — Apps Script Web Apps no soportan CORS estándar, así que la respuesta no
+  se puede leer; solo se distingue fallo de red (catch) de envío realizado.
+  Para volver a desplegar tras editar Code.gs: en script.google.com → Implementar →
+  Gestionar implementaciones → editar (lápiz) → Nueva versión → Implementar. Si en cambio
+  se crea una implementación nueva desde cero, cambia la URL y hay que actualizar
+  CONTACT_FORM_ENDPOINT de nuevo.
