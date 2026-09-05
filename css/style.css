@@ -526,7 +526,7 @@ ul { list-style: none; }
 /* ============================================================
    PROJECTS PAGE — cinematic list
    ============================================================ */
-.projects-page { padding: 4rem 0 6rem; }
+.projects-page { padding: 6rem 0 6rem; }
 .projects-page__header { margin-bottom: 4rem; }
 
 .filter-bar {
@@ -976,7 +976,7 @@ ul { list-style: none; }
 /* ============================================================
    SKILLS PAGE
    ============================================================ */
-.skills-page { padding: 4rem 0 6rem; }
+.skills-page { padding: 6rem 0 6rem; }
 .skills-page__header { margin-bottom: 4rem; }
 
 .skills-grid {
@@ -1122,7 +1122,7 @@ ul { list-style: none; }
 /* ============================================================
    ABOUT PAGE
    ============================================================ */
-.about-page { padding: 4rem 0 6rem; }
+.about-page { padding: 6rem 0 6rem; }
 .about-grid {
   display: grid;
   grid-template-columns: 0.6fr 1.6fr;
@@ -1169,7 +1169,7 @@ ul { list-style: none; }
 /* ============================================================
    CONTACT PAGE
    ============================================================ */
-.contact-page { padding: 4rem 0 6rem; }
+.contact-page { padding: 6rem 0 6rem; }
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

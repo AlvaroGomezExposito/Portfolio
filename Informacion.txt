@@ -1,6 +1,6 @@
 PORTFOLIO WEB — Documento de referencia
 
-Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 10)
+Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 11)
 
 1. INFORMACIÓN DEL PROYECTO
 
@@ -440,6 +440,13 @@ Pendiente (Robot Armado):
 
 Pendiente (general):
   ▸ Dominio propio (opcional) — actualmente publicado en subdominio gratuito de GitHub Pages
+
+Novedades sesión 11 (septiembre 2026):
+  ✓ Más separación entre el nav y la cabecera de cada página (projects.html, skills.html,
+      about.html, contact.html): el padding-top de .projects-page / .skills-page /
+      .about-page / .contact-page sube de 4rem a 6rem (antes coincidía exactamente con
+      --nav-h, así que el section-eyebrow ("Galería" / "Stack" / "Quién soy" / "Hablemos")
+      quedaba pegado justo debajo del nav sin margen real)
 
 Novedades sesión 10 (septiembre 2026):
   ✓ Dock de logos (projects.html) reteñido a ámbar: fondo y borde de .project-item__logos
