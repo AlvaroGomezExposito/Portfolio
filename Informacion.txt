@@ -1,6 +1,6 @@
 PORTFOLIO WEB — Documento de referencia
 
-Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 7)
+Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 10)
 
 1. INFORMACIÓN DEL PROYECTO
 
@@ -66,7 +66,11 @@ Auto-apertura de modal desde URL: projects.html?open=N abre el proyecto en posic
   - La URL se limpia tras abrir el modal (history.replaceState)
   - Usado por los trabajos recientes de index.html para enlazar al proyecto correcto
 Portadas de proyectos: brightness(0.80) en reposo, brightness(0.60) en hover
-Subtítulos de proyectos en color Arena dorada #c9a87c para mayor visibilidad (inline style)
+Subtítulos de proyectos (.project-item__desc) en color Arena dorada #c9a87c, unificado como
+  color base en css/style.css (ya no es inline) — los 6 proyectos usan el mismo tono
+Legibilidad del overlay de proyecto sobre la imagen: velo oscuro (.project-item::after,
+  gradiente de negro a transparente) revelado en hover detrás del texto, más text-shadow
+  en el subtítulo — evita que título/subtítulo se pierdan sobre fotos claras o muy detalladas
 Barras de habilidades animadas al hacer scroll
 Niveles de habilidad estandarizados: Básico 30% · Intermedio 50% · Intermedio-Avanzado 60% · Avanzado 85% · Muy Avanzado 95%
 Logos reales de programas en skill cards desde assets/img/logos/
@@ -77,6 +81,9 @@ Footer compartido inyectado via js/layout.js — links correctos: ArtStation · 
 Links del footer: alvatrom.artstation.com · github.com/AlvaroGomezExposito · linkedin.com/in/alvaro-gomez-exposito-3d
 Indicador de disponibilidad (punto verde animado) en contact.html
 Responsive: adaptado a móvil y tablet (hero visual oculto en <900px)
+Escalado para pantallas grandes / ultra-wide (≥2200px y ≥3200px): sube font-size base del html
+  y la variable --max-w para que el contenido crezca con la pantalla en vez de quedar como una
+  isla pequeña centrada. 1920x1080 e inferiores no se ven afectados. Ver sección 16.
 Carrusel horizontal de proyectos en móvil/tablet (≤768px): deslizamiento lateral con CSS scroll-snap
   - Scroll-snap nativo del navegador (sin librerías externas)
   - Puntos indicadores (dots) bajo la lista, sincronizados con el scroll
@@ -103,6 +110,12 @@ Analytics Umami integrado en los 5 HTML
 Descripción del modal renderizada con .innerHTML (no .textContent) → permite enlaces HTML dentro de data-desc
   - .modal__desc a { color: var(--accent); text-decoration: underline; }
   - .modal__desc a:hover { opacity: 0.8; }
+Dock de logos por proyecto en projects.html: fila de logos de las herramientas usadas, estilo
+  "dock" de macOS (píldora traslúcida con blur, teñida en ámbar #c8832a), alineada a la
+  izquierda bajo el título de cada tarjeta. Oculto por defecto; aparece con fade-in solo al
+  pasar el cursor sobre la tarjeta del proyecto. Al pasar el cursor sobre un logo, este se
+  amplía junto con sus vecinos inmediatos (efecto de magnificación tipo dock). Ver sección 16
+  para detalles técnicos y sección 5 para el listado de logos por proyecto.
 
 
 5. PROYECTOS EN projects.html  (orden actual — 6 proyectos)
@@ -119,6 +132,7 @@ Proyecto 1 — Robot Armado  (3D / Motion)  ⚠ PENDIENTE DE ASSETS
     5. Imagen UDIM/UV layout:                 assets/img/robot-armado/TODO-udims.webp
   data-download-links: ",,,,  " (5 entradas vacías — se rellenarán con Drive links cuando existan)
   Subtítulo: Blender · 3ds Max · Tyflow · RizomUV · Substance 3D Painter · Marmoset Toolbag · After Effects
+  Logos en dock: Blender · 3ds Max · tyFlow · RizomUV · Substance 3D Painter · Marmoset Toolbag · After Effects
   Descripción: escrita en ES y EN · enlace clicable a Sketchfab del entorno (archiwum_xyz)
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
   ⚠ NO incluido aún en el hero slideshow ni en "trabajos recientes" de index.html (requiere imagen real)
@@ -127,7 +141,9 @@ Proyecto 2 — Exposición de Vivienda · Corona Renderer  (3D / Arquitectura)
   Carpeta: assets/img/exposicion-vivienda/
   Galería (6 imgs): Artstation, Artstation2, ArtstationHamacasReducido,
                     MuestraPorche5, ArtstationJardin, ArtstationPiscina
-  Subtítulo: Visualización arquitectónica · 3ds Max · Corona Renderer (#c9a87c)
+  Subtítulo: Visualización arquitectónica · 3ds Max · Corona Renderer
+  Logos en dock: 3ds Max · Corona Renderer · tyFlow (tyFlow no aparece en el subtítulo pero se usó
+    para esparcir hojas en el jardín, según la descripción completa del proyecto)
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
 
 Proyecto 3 — Nuka-Cola: Holiday Spirit Never Ends  (Arte Digital / Fan Art)
@@ -140,7 +156,8 @@ Proyecto 3 — Nuka-Cola: Holiday Spirit Never Ends  (Arte Digital / Fan Art)
     11. PruebaPortada.webp
     12. YouTube: FinalbotellaYoutube (https://www.youtube.com/embed/AIykxyigyug) vol:0.7
     13. YouTube: VideoFinalSimulacion (https://www.youtube.com/embed/ngqnVsMbMiE) vol:0.7
-  Subtítulo: 3ds Max · Arnold Renderer · TyFlow · ZBrush · After Effects (#c9a87c)
+  Subtítulo: 3ds Max · Arnold Renderer · TyFlow · ZBrush · After Effects
+  Logos en dock: 3ds Max · Arnold Renderer · tyFlow · ZBrush · After Effects
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
 
 Proyecto 4 — Anuncio Educativo ESCALA  (3D / Motion)
@@ -150,6 +167,10 @@ Proyecto 4 — Anuncio Educativo ESCALA  (3D / Motion)
                     RenderCables, ExplosionInicio, ExplosionParticulas, Explosion2,
                     EdificioProcedural, AssetsEdificio,
                     YouTube: https://www.youtube.com/embed/EIJ1bnA1PxU (último)
+  Subtítulo (tarjeta): 3ds Max · tyFlow · Substance 3D Painter · After Effects
+  Logos en dock: 3ds Max · tyFlow · Substance 3D Painter · After Effects · ZBrush · Arnold Renderer
+    (ZBrush y Arnold no aparecen en el subtítulo de la tarjeta pero se usaron según la descripción
+    completa: logo modelado en ZBrush, render final con Arnold Renderer)
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
 
 Proyecto 5 — Dettlaff van der Eretein — Fan Art  (Arte Digital / Fan Art)
@@ -158,6 +179,8 @@ Proyecto 5 — Dettlaff van der Eretein — Fan Art  (Arte Digital / Fan Art)
                                ReferenciasVampiro,
                                YouTube: https://www.youtube.com/embed/7g_-AkyrFR0 (último)
   The Witcher 3: Blood and Wine · referencia: busto de Marcin Blaszczak
+  Logos en dock: ZBrush · Substance 3D Painter (se excluyen "The Witcher 3" / "Blood and Wine" del
+    subtítulo por no ser herramientas de software)
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
 
 Proyecto 6 — Anuncio Conceptual Canon  (3D / Motion)
@@ -166,6 +189,7 @@ Proyecto 6 — Anuncio Conceptual Canon  (3D / Motion)
                                alvaro-gomez-3mejora, alvaro-gomez-4mejora,
                                YouTube: https://www.youtube.com/embed/QZ66ig0SeUM (último)
   tyFlow · cloth simulation · Canon F-1 de Sketchfab (autor: Miguel Adão)
+  Logos en dock: 3ds Max · tyFlow ("Cloth Simulation" del subtítulo no es una herramienta con logo)
   Bilingüe: data-desc + data-desc-en / data-title-en / data-cat-en
 
 
@@ -396,6 +420,15 @@ Completado:
   ✓ Formulario de contacto desplegado en producción vía Google Apps Script + Gmail
       — Web App desplegado el 3 sept 2026; URL activa pegada en js/main.js (CONTACT_FORM_ENDPOINT)
       — Código fuente de referencia en apps-script/Code.gs
+  ✓ Publicado en producción vía GitHub Pages: https://alvarogomezexposito.github.io/Portfolio/
+      (repo github.com/AlvaroGomezExposito/Portfolio)
+  ✓ Escalado de layout en pantallas grandes / ultra-wide (≥2200px y ≥3200px)
+  ✓ Dock de logos por proyecto en projects.html (estilo macOS, hover para revelar, magnificación),
+      teñido en ámbar #c8832a
+  ✓ Legibilidad del overlay de proyecto reforzada: velo oscuro (.project-item::after) + text-shadow
+      en el subtítulo, para que título y subtítulo se lean bien sobre cualquier imagen de portada
+  ✓ Color de subtítulo (.project-item__desc) unificado a #c9a87c en los 6 proyectos, como color
+      base en CSS (ya no depende de estilos inline por proyecto)
 
 Pendiente (Robot Armado):
   ▸ Crear carpeta assets/img/robot-armado/ con imagen de portada y UDIM layout (.webp)
@@ -406,7 +439,58 @@ Pendiente (Robot Armado):
   ▸ Añadir Robot Armado a "trabajos recientes" de index.html
 
 Pendiente (general):
-  ▸ Subir a Netlify / dominio propio
+  ▸ Dominio propio (opcional) — actualmente publicado en subdominio gratuito de GitHub Pages
+
+Novedades sesión 10 (septiembre 2026):
+  ✓ Dock de logos (projects.html) reteñido a ámbar: fondo y borde de .project-item__logos
+      pasan de rgba(255,255,255,0.08/0.14) a rgba(200,131,42,0.08/0.14) (tono #c8832a),
+      manteniendo la misma opacidad/transparencia que antes
+  ✓ Sombra de texto en el subtítulo bajo cada proyecto (.project-item__desc): añadido
+      text-shadow: 0 2px 6px rgba(0,0,0,0.85) para mejorar el contraste con el fondo al
+      revelarse en hover (afecta también a los subtítulos con color inline #c9a87c)
+  ✓ El text-shadow no bastaba en imágenes claras/detalladas — añadido un velo (scrim) oscuro
+      real: pseudo-elemento .project-item::after con gradiente
+      linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 38%, rgba(0,0,0,0) 68%),
+      oculto por defecto (opacity:0) y visible en .project-item:hover, igual que el resto
+      del overlay. Se ordena con z-index explícito: media(0) < scrim ::after(1) <
+      .project-item__content(2), para que el degradado quede entre la imagen y el texto
+  ✓ Color de .project-item__desc aclarado de var(--muted) #888888 a #cfc9bd para mejorar
+      la legibilidad de base (el color inline #c9a87c de algunos proyectos no cambia)
+  ✓ Unificado el color de todos los subtítulos (.project-item__desc) a #c9a87c (Arena dorada,
+      el mismo que ya tenían "Exposición de Vivienda" y "Nuka-Cola"). Se fijó como color base
+      en css/style.css y se eliminaron los style="color:#c9a87c;" inline redundantes en
+      projects.html — ahora los 6 proyectos usan el mismo color sin excepciones
+
+Novedades sesión 9 (septiembre 2026):
+  ✓ Dock de logos por proyecto en projects.html — fila de iconos de las herramientas usadas en
+      cada proyecto, dentro de una "píldora" traslúcida estilo dock de macOS
+      — Estructura HTML: dentro de .project-item__content se separó el bloque existente
+        (título/descripción + flecha) en .project-item__main, y se añadió .project-item__logos
+        como hermano, con un <img> por herramienta (logos desde assets/img/logos/)
+      — CSS (.project-item__logos): border-radius:999px, fondo rgba(200,131,42,0.08)
+        (tono ámbar #c8832a desde sesión 10, antes rgba(255,255,255,0.08)),
+        backdrop-filter: blur(14px) saturate(150%), borde e inset shadow sutiles
+      — Alineado a la izquierda bajo el título (align-self: flex-start), no centrado
+      — Oculto por defecto (opacity:0, translateY(8px)) y visible con fade-in solo en
+        .project-item:hover, igual que el resto del overlay (título/desc/flecha)
+      — Magnificación tipo dock: el logo en :hover crece (scale 1.45) y sus vecinos
+        inmediatos (selector adyacente + / :has(+ img:hover)) crecen algo menos (scale 1.18)
+      — Iconos que necesitan el filtro logo-white (tyFlow, ZBrush) reutilizan la misma clase
+        ya usada en skills.html
+      — Responsive: gap y tamaño de icono reducidos en ≤768px
+      — Herramientas mostradas por proyecto: ver "Logos en dock" en cada proyecto de la sección 5.
+        En dos proyectos (Exposición de Vivienda y Anuncio ESCALA) el dock incluye herramientas
+        mencionadas en la descripción completa pero no listadas en el subtítulo corto de la
+        tarjeta (confirmado con el usuario antes de añadirlas)
+
+Novedades sesión 8 (septiembre 2026):
+  ✓ Escalado de layout para pantallas grandes / ultra-wide (1440p, 4K...)
+      — css/style.css: @media (min-width: 2200px) → html font-size 17.5px + --max-w 1440px
+      — @media (min-width: 3200px) → html font-size 20px + --max-w 1680px
+      — 1920x1080 y resoluciones inferiores quedan sin cambios
+  ✓ Añadido .claude/launch.json (config de VS Code/Claude Code para lanzar un servidor
+      estático local con `python -m http.server 8080`; solo herramienta de desarrollo,
+      no forma parte del sitio publicado)
 
 Novedades sesión 7 (septiembre 2026):
   ✓ Formulario de contacto conectado a un backend real: Google Apps Script + Gmail
@@ -518,7 +602,31 @@ Modal description: .modal__desc usa .innerHTML (no .textContent) para renderizar
   dentro de data-desc/data-desc-en. Los demás campos del modal (.modal__cat, .modal__title) siguen
   usando .textContent ya que no contienen HTML.
 About page: columna foto 0.6fr · aspect-ratio 3/3.5 · textos 1.1rem / 1.18rem · timeline ampliado
-Hosting recomendado: Netlify Drop (gratis) + dominio .com o .art (~10€/año)
+Escalado en pantallas grandes: como los tamaños del sitio usan rem, subir el font-size del html
+  reescala tipografía, espaciados y grids a la vez. --max-w controla el ancho máximo del contenido
+  (var --max-w, usada en .container y similares). En css/style.css, al final del archivo:
+  @media (min-width: 2200px) → font-size 17.5px + --max-w 1440px
+  @media (min-width: 3200px) → font-size 20px + --max-w 1680px
+  1920x1080 e inferiores no entran en estos breakpoints y no cambian.
+Dock de logos (projects.html): dentro de cada .project-item, .project-item__content ahora es
+  flex-direction:column con dos hijos: .project-item__main (título/desc + flecha, la fila que ya
+  existía) y .project-item__logos (nuevo, va después). .project-item__logos es la píldora estilo
+  dock: width:max-content + align-self:flex-start para no ocupar todo el ancho, backdrop-filter
+  para el efecto cristal, y opacity:0/translateY(8px) → opacity:1/translateY(0) revelado en
+  .project-item:hover (mismo patrón que .project-item__desc y .project-item__arrow). La
+  magnificación de icono usa position:relative + transform:scale en :hover, y para los vecinos
+  el selector de hermano adyacente (img:hover + img) y :has() (img:has(+ img:hover)) — :has()
+  requiere un navegador moderno (Chrome/Edge/Safari recientes, Firefox 121+); si no está soportado
+  simplemente no magnifica los vecinos, sin romper nada.
+Legibilidad de texto sobre imagen (projects.html): además del text-shadow en .project-item__desc,
+  .project-item::after es un pseudo-elemento con gradiente (to top, negro → transparente) que
+  actúa de velo oscuro entre la imagen y el texto. Se apila con z-index explícito: .project-item__media
+  (z-index:0, implícito) < .project-item::after (z-index:1) < .project-item__content (z-index:2).
+  Oculto por defecto (opacity:0) y visible en :hover, igual que el resto del overlay.
+Hosting: publicado en GitHub Pages (gratis) en https://alvarogomezexposito.github.io/Portfolio/,
+  desde el repo github.com/AlvaroGomezExposito/Portfolio. Alternativa si se quiere dominio propio:
+  Netlify Drop (gratis) + dominio .com o .art (~10€/año), o apuntar un dominio propio al mismo
+  GitHub Pages (archivo CNAME en el repo).
 
 Formulario de contacto (backend): código fuente de referencia en apps-script/Code.gs
   (doPost recibe name/email/msg y envía email vía MailApp a alvarogomez0402@gmail.com
