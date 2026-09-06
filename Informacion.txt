@@ -1,6 +1,6 @@
 PORTFOLIO WEB — Documento de referencia
 
-Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 11)
+Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 12)
 
 1. INFORMACIÓN DEL PROYECTO
 
@@ -104,6 +104,15 @@ Swipe táctil en visor fullscreen
   - Llama a navigateFullscreen(±1) con umbral 50px
   - Misma guarda para embeds: el swipe no navega si el ítem actual es un embed
 Botón de cerrar modal (✕) en color gris azulado frío #b0c4d8 para mayor visibilidad
+  - Posición bajada ligeramente en el eje Y (top: 1.5rem → 2.5rem) para más margen visual
+Al cerrar el modal de proyecto (✕, clic fuera o Escape) o el visor fullscreen, el contenedor de
+  media se vacía (innerHTML = '') además de pausar el <video> si lo hay → evita que un vídeo de
+  YouTube (iframe) siga reproduciéndose de fondo (con audio) tras cerrar la pestaña del proyecto
+Volumen predefinido al reproducir automáticamente: Anuncio Educativo ESCALA y Anuncio Conceptual
+  Canon ahora usan |vol:0.75 en su URL de YouTube (antes sonaban muy bajo por defecto)
+Solicitud de calidad alta en vídeos de YouTube: al cargar el iframe se pide setPlaybackQuality
+  ('hd1080') vía postMessage, best-effort — YouTube puede ignorarla si la red no lo permite (sin
+  garantía oficial desde 2018), pero reduce la frecuencia con la que el vídeo arranca en baja calidad
 Analytics Umami integrado en los 5 HTML
   - Script: <script defer src="https://cloud.umami.is/script.js" data-website-id="84b20424-426c-4b66-8ffb-ea98c5c36936">
   - Añadido justo antes del </head> en: index.html · about.html · contact.html · projects.html · skills.html
@@ -429,6 +438,11 @@ Completado:
       en el subtítulo, para que título y subtítulo se lean bien sobre cualquier imagen de portada
   ✓ Color de subtítulo (.project-item__desc) unificado a #c9a87c en los 6 proyectos, como color
       base en CSS (ya no depende de estilos inline por proyecto)
+  ✓ Corregido bug de autoplay: al cerrar el modal de proyecto o el visor fullscreen, el vídeo de
+      YouTube (iframe) dejaba de verse pero seguía sonando de fondo — ahora se elimina del DOM al cerrar
+  ✓ Volumen predefinido al 75% en los vídeos de Anuncio Educativo ESCALA y Anuncio Conceptual Canon
+  ✓ Solicitud best-effort de calidad alta (hd1080) en vídeos de YouTube al cargar el iframe
+  ✓ Botón de cerrar modal (✕) bajado ligeramente en el eje Y
 
 Pendiente (Robot Armado):
   ▸ Crear carpeta assets/img/robot-armado/ con imagen de portada y UDIM layout (.webp)
@@ -440,6 +454,30 @@ Pendiente (Robot Armado):
 
 Pendiente (general):
   ▸ Dominio propio (opcional) — actualmente publicado en subdominio gratuito de GitHub Pages
+
+Novedades sesión 12 (septiembre 2026):
+  ✓ Corregido bug: los vídeos de YouTube autoplay (p.ej. Nuka-Cola) seguían reproduciéndose (con
+      audio) de fondo tras cerrar el modal de proyecto con la X, clic fuera o cerrar el visor
+      fullscreen. Causa: closeModal()/closeFullscreen() solo pausaban <video> HTML5, pero los
+      vídeos de proyecto se insertan como <iframe> de YouTube, que no tiene .pause(). El overlay
+      solo se ocultaba visualmente (CSS), el iframe seguía en el DOM y reproduciendo
+      — Fix: closeModal() vacía overlay.querySelector('.modal__media').innerHTML además de
+        pausar el <video> si existe
+      — Fix: closeFullscreen() vacía fsMedia.innerHTML además de pausar el <video> si existe
+      — Al eliminarse el <iframe> del DOM, YouTube detiene la reproducción de inmediato
+  ✓ Volumen predefinido al 75% en autoplay para Anuncio Educativo ESCALA y Anuncio Conceptual
+      Canon (antes sonaban muy bajo) — añadido sufijo |vol:0.75 a sus URLs de YouTube en
+      data-gallery (projects.html), usando el mecanismo ya existente de control de volumen
+  ✓ Investigado por qué algunos vídeos arrancan en la peor calidad: comportamiento normal del
+      modo "auto" de YouTube (bitrate adaptativo según ancho de banda estimado y tamaño del
+      reproductor en el momento del autoplay), no un bug del sitio
+  ✓ Añadida función requestYoutubeHQ(iframe) en js/main.js: al cargar cualquier iframe de
+      YouTube (galería del modal y visor fullscreen) se envía por postMessage el comando
+      setPlaybackQuality con 'hd1080', best-effort — YouTube puede ignorarlo si la red no lo
+      permite (no hay garantía oficial desde 2018), pero reduce la frecuencia de arranque en
+      baja calidad
+  ✓ Botón de cerrar modal (✕) bajado ligeramente en el eje Y: top pasa de 1.5rem a 2.5rem
+      (.modal__close en css/style.css)
 
 Novedades sesión 11 (septiembre 2026):
   ✓ Más separación entre el nav y la cabecera de cada página (projects.html, skills.html,
@@ -599,6 +637,13 @@ Galería de imágenes: atributo data-gallery con rutas separadas por coma
   - Embeds locales (.html/.htm): detectados por isEmbed() → <iframe> sin parámetros YouTube
     · Marmoset Toolbag Viewer export: HTML+JS+WebGL; el drag rota el modelo sin activar swipe nav
   - Control de volumen: sufijo |vol:0.85 en la ruta (YouTube via postMessage, HTML5 via .volume)
+  - Calidad de vídeo YouTube: al cargar el iframe se llama requestYoutubeHQ(iframe), que pide
+    setPlaybackQuality('hd1080') vía postMessage. Best-effort — YouTube decide la calidad real
+    según ancho de banda/tamaño del reproductor y puede ignorar la petición
+Cierre de modal/fullscreen y vídeos: closeModal() y closeFullscreen() (js/main.js) pausan el
+  <video> HTML5 si existe Y vacían el contenedor de media (.modal__media / #fsMedia innerHTML = '').
+  Necesario porque los vídeos de YouTube son <iframe>, sin método .pause(); si no se elimina del
+  DOM al cerrar, seguían reproduciéndose (con audio) aunque el modal ya no fuera visible
 Miniatura con fondo desenfocado: div.hero__slide-blur (position:absolute, filter:blur(18px) brightness(0.35))
   + img con object-fit:contain y position:relative (position:relative es obligatorio para que el img
   quede por encima del blur en el orden de capas CSS; sin él el blur tapa la imagen)

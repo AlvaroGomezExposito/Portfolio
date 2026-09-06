@@ -375,6 +375,10 @@ function initModal() {
     return /\.html?$/i.test(src.split('|')[0]);
   }
 
+  function requestYoutubeHQ(iframe) {
+    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setPlaybackQuality', args: ['hd1080'] }), '*');
+  }
+
   function parseMedia(entry) {
     const parts = entry.split('|');
     const src = parts[0].trim();
@@ -387,10 +391,11 @@ function initModal() {
     const { src, volume } = parseMedia(entry);
     if (isYoutube(src)) {
       fsMedia.innerHTML = `<iframe src="${src}?autoplay=1&enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%;height:100%;border:0;"></iframe>`;
-      if (volume !== null) {
+      {
         const iframe = fsMedia.querySelector('iframe');
         if (iframe) iframe.addEventListener('load', () => {
-          iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [Math.round(volume * 100)] }), '*');
+          requestYoutubeHQ(iframe);
+          if (volume !== null) iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [Math.round(volume * 100)] }), '*');
         });
       }
     } else if (isEmbed(src)) {
@@ -445,6 +450,7 @@ function initModal() {
   function closeFullscreen() {
     const v = fsMedia && fsMedia.querySelector('video');
     if (v) v.pause();
+    if (fsMedia) fsMedia.innerHTML = '';
     fullscreenEl.classList.remove('open');
     fullscreenState = null;
   }
@@ -496,10 +502,11 @@ function initModal() {
       mediaWrap.querySelector('.gallery__download').addEventListener('click', e => e.stopPropagation());
     }
     if (volume !== null && isVideo(src)) { const v = mediaWrap.querySelector('video'); if (v) v.volume = volume; }
-    if (volume !== null && isYoutube(src)) {
+    if (isYoutube(src)) {
       const iframe = mediaWrap.querySelector('iframe');
       if (iframe) iframe.addEventListener('load', () => {
-        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [Math.round(volume * 100)] }), '*');
+        requestYoutubeHQ(iframe);
+        if (volume !== null) iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [Math.round(volume * 100)] }), '*');
       });
     }
     mediaWrap.querySelector('.gallery__prev').addEventListener('click', e => {
@@ -549,6 +556,8 @@ function initModal() {
     currentModalItem = null;
     const v = overlay.querySelector('video');
     if (v) v.pause();
+    const mediaWrap = overlay.querySelector('.modal__media');
+    if (mediaWrap) mediaWrap.innerHTML = '';
   }
 
   // ── Swipe táctil en galería del modal ───────────────────────

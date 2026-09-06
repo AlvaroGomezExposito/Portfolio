@@ -960,7 +960,7 @@ ul { list-style: none; }
 
 .modal__close {
   position: absolute;
-  top: 1.5rem; right: 1.5rem;
+  top: 2.5rem; right: 1.5rem;
   width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
   border: 1px solid #3a4a5a;
