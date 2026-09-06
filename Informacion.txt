@@ -456,7 +456,9 @@ Completado:
   ✓ Volumen predefinido al 75% en los vídeos de Anuncio Educativo ESCALA y Anuncio Conceptual Canon
   ✓ Solicitud best-effort de calidad alta (hd1080) en vídeos de YouTube al cargar el iframe
   ✓ Botón de cerrar modal (✕) bajado ligeramente en el eje Y
-
+  ✓ Espaciado vertical del hero de index.html reducido en móvil (≤900px): sin el
+      hero__visual, el texto ya no queda flotando con exceso de aire arriba/abajo ni
+      antes de "Trabajos recientes"
 Pendiente (Robot Armado):
   ▸ Crear carpeta assets/img/robot-armado/ con imagen de portada y UDIM layout (.webp)
   ▸ Crear carpeta assets/marmoset/robot-armado/ con el export del visor interactivo de Marmoset
@@ -467,6 +469,32 @@ Pendiente (Robot Armado):
 
 Pendiente (general):
   ▸ Dominio propio (opcional) — actualmente publicado en subdominio gratuito de GitHub Pages
+  ▸ En projects.html en móvil (≤768px), verificar que con el segundo intento (título y
+      subtítulo -15% + padding reducido, manteniendo aspect-ratio 16/9) ya no se corte
+      el texto en títulos largos — pendiente de confirmación del usuario
+
+Novedades sesión 13 (septiembre 2026):
+  ✓ Corregido espacio vertical excesivo en index.html en móvil (≤900px): al ocultarse
+      .hero__visual, el bloque de texto del hero quedaba centrado en un .hero con
+      min-height: 100vh, y se acumulaban paddings/margins pensados para el layout de
+      escritorio (.hero__inner, .hero__stats, .recent), dejando mucho aire entre el nav
+      y el texto, y entre las stats (20+/3+/10+) y "Trabajos recientes"
+      — Fix, solo dentro de @media (max-width: 900px) en css/style.css (no afecta a
+        escritorio): .hero min-height: auto · .hero__inner padding 4rem→2.5rem ·
+        .hero__stats margin-top 3rem→2rem / padding-top 2rem→1.5rem ·
+        .recent padding 5rem→2.5rem
+  ✓ Probado y revertido: aumentar aspect-ratio de .project-item a 4/3 en móvil
+      (≤768px) + reducir padding/font-size del título, para evitar el recorte de
+      título/subtítulo en las tarjetas de projects.html. No convenció al usuario;
+      vuelto a aspect-ratio 16/9 (sin cambios).
+  ✓ Segundo intento para el recorte de título/subtítulo en projects.html en móvil
+      (≤768px), manteniendo aspect-ratio 16/9 (sin tocar la altura de la tarjeta):
+      — .project-item__title font-size reducido 15%: clamp(1.8rem,4vw,3rem) →
+        clamp(1.53rem,3.4vw,2.55rem)
+      — .project-item__desc font-size reducido 15%: 0.95rem → 0.81rem
+      — .project-item__content padding: clamp(1.5rem,3vw,2.5rem) → 1.25rem (menos
+        padding inferior → el bloque de texto queda más abajo, más cerca del borde
+        inferior de la imagen, dejando más margen libre arriba para el título)
 
 Novedades sesión 12 (septiembre 2026):
   ✓ Corregido bug: los vídeos de YouTube autoplay (p.ej. Nuka-Cola) seguían reproduciéndose (con
