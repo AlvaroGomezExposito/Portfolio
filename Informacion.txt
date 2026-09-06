@@ -2,6 +2,19 @@ PORTFOLIO WEB — Documento de referencia
 
 Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 12)
 
+
+REGLAS DE TRABAJO (leer siempre antes de tocar este proyecto)
+
+1. No realizar cambios en el código hasta que el usuario lo ordene explícitamente.
+   Si se detecta algo que podría mejorarse o hay dudas sobre el enfoque, sugerir el
+   cambio y preguntar al usuario si quiere que se implemente, en vez de aplicarlo
+   directamente.
+2. Después de realizar cambios (una vez el usuario los ha pedido y se han implementado),
+   actualizar el estado del proyecto dentro de este mismo archivo (Informacion.txt):
+   sección "14. ESTADO ACTUAL" (marcar lo completado, mover/quitar pendientes) y añadir
+   una entrada en "Novedades sesión N" describiendo el cambio.
+
+
 1. INFORMACIÓN DEL PROYECTO
 
 Nombre: Álvaro Gómez Expósito
