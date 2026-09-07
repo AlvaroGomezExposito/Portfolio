@@ -43,10 +43,20 @@
         <div class="footer__inner">
           <p class="footer__copy" data-i18n="footer.copy">© 2025 Álvaro Gómez Expósito. Todos los derechos reservados.</p>
           <div class="footer__links">
-            <a href="https://alvatrom.artstation.com/"                        target="_blank" rel="noopener">ArtStation</a>
-            <a href="https://github.com/AlvaroGomezExposito"                             target="_blank" rel="noopener">GitHub</a>
-            <a href="https://www.linkedin.com/in/alvaro-gomez-exposito-3d"   target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://alvatrom.artstation.com/" target="_blank" rel="noopener">
+              <span>ArtStation</span>
+              <img src="assets/img/logos/ArtstationLogo.png" alt="" class="footer__link-logo">
+            </a>
+            <a href="https://github.com/AlvaroGomezExposito" target="_blank" rel="noopener">
+              <span>GitHub</span>
+              <img src="assets/img/logos/Github_logo.png" alt="" class="footer__link-logo footer__link-logo--white">
+            </a>
+            <a href="https://www.linkedin.com/in/alvaro-gomez-exposito-3d" target="_blank" rel="noopener">
+              <span>LinkedIn</span>
+              <img src="assets/img/logos/Linkedin.png" alt="" class="footer__link-logo">
+            </a>
           </div>
+          <a href="privacy.html" class="footer__legal" data-i18n="footer.privacy">Privacidad</a>
         </div>
       </div>
     </footer>

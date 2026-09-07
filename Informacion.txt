@@ -1,6 +1,6 @@
 PORTFOLIO WEB — Documento de referencia
 
-Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 14)
+Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 15)
 
 
 REGLAS DE TRABAJO (leer siempre antes de tocar este proyecto)
@@ -466,6 +466,18 @@ Completado:
       (≤768px), anclados abajo a la izquierda, sin depender de :hover (ver sesión 14)
   ✓ Formulario de contacto: validación de formato de email (regex) en cliente (js/main.js)
       y en el backend (apps-script/Code.gs), más campo honeypot anti-bots — ver sesión 15
+  ✓ Enlaces del footer (ArtStation/GitHub/LinkedIn) centrados y con tamaño mayor en
+      escritorio (≥769px) — ver sesión 15
+  ✓ Enlace de CV de about.html corregido (apuntaba a un archivo inexistente) e igualado
+      al estilo del enlace de CV de contact.html — ver sesión 15
+  ✓ Página privacy.html (Política de Privacidad) creada y enlazada desde el footer:
+      cubre formulario de contacto y analítica Umami, bilingüe ES/EN — ver sesión 15
+  ✓ Botón de idioma (ES/EN) del nav agrandado en escritorio (≥769px): font-size
+      0.72rem→0.85rem, padding 0.3rem 0.6rem→0.4rem 0.8rem — ver sesión 15
+  ✓ README.md reescrito por completo: era una plantilla genérica sin actualizar desde el
+      commit inicial (nombre incorrecto "Álvaro García", rutas y estructura obsoletas) —
+      ahora es mínimo (nombre real, una línea de descripción, enlace a la web en vivo) —
+      ver sesión 15
 Pendiente (Robot Armado):
   ▸ Crear carpeta assets/img/robot-armado/ con imagen de portada y UDIM layout (.webp)
   ▸ Crear carpeta assets/marmoset/robot-armado/ con el export del visor interactivo de Marmoset
@@ -478,10 +490,6 @@ Pendiente (general):
   ▸ Dominio propio (opcional) — actualmente publicado en subdominio gratuito de GitHub Pages
   ▸ Redesplegar apps-script/Code.gs en script.google.com (nueva implementación) para que la
     validación de email + honeypot del backend entre en vigor en la URL pública ya usada
-  ▸ Valorar aviso breve de privacidad cerca del formulario de contacto (RGPD/LOPDGDD): el
-    formulario ya recogía nombre+email+mensaje y los enviaba vía Google Apps Script/Gmail
-    antes de este cambio; no es un requisito nuevo introducido por la validación/honeypot,
-    pero sigue pendiente como buena práctica
 
 Novedades sesión 15 (septiembre 2026):
   ✓ Preocupación del usuario: en contact.html se podía escribir cualquier texto en el campo
@@ -524,6 +532,136 @@ Novedades sesión 15 (septiembre 2026):
       (ver cabecera del archivo) — hay que pegar el archivo actualizado en script.google.com
       y crear una nueva implementación para que la validación del backend entre en vigor en
       la URL pública ya pegada en CONTACT_FORM_ENDPOINT (js/main.js)
+  ✓ Enlaces del footer (ArtStation / GitHub / LinkedIn) en escritorio (≥769px): antes el
+      footer usaba flex con justify-content:space-between (copyright a la izquierda,
+      enlaces pegados al extremo derecho); a petición del usuario, ahora los enlaces
+      quedan centrados respecto al ancho total del footer y el copyright se mantiene a
+      la izquierda, sin tocar el móvil/tablet (≤768px, ya ajustado en sesiones previas)
+      — Se descartaron dos alternativas antes de implementar (confirmado con el usuario
+        vía AskUserQuestion): agrupar copyright+enlaces centrados juntos, y apilar ambos
+        centrados en dos líneas (como ya hace el móvil) — se eligió centrar solo los
+        enlaces, independientes del copyright
+      — Implementado con CSS Grid en vez de position:absolute para evitar que el
+        copyright (texto largo) se solape con los enlaces centrados en anchos de
+        escritorio más estrechos (~769-900px): .footer__inner pasa a
+        grid-template-columns: 1fr auto 1fr dentro de @media (min-width: 769px) — el
+        copyright ocupa la primera columna (justify-self:start) y los enlaces la columna
+        central (justify-self:center); la tercera columna vacía balancea el grid para
+        que el centrado sea respecto al ancho total, no solo respecto al hueco libre.
+        Si el copyright no cabe en su columna, hace wrap a dos líneas en vez de invadir
+        la columna de los enlaces
+      — Tamaño de los enlaces (.footer__links a) en escritorio aumentado de 0.65rem a
+        0.85rem, con gap entre enlaces de 1.5rem a 2rem — regla nueva dentro del mismo
+        @media (min-width: 769px), no toca el font-size 0.81rem ya fijado para
+        móvil/tablet (≤768px) en sesión 14
+      — Regla nueva colocada en el bloque de estilos de .footer, entre
+        .footer__links a:hover y el @media (max-width: 768px) ya existente — rangos de
+        media query disjuntos (≥769 vs ≤768), sin conflicto de cascada
+  ✓ Logos añadidos bajo cada enlace del footer en escritorio (≥769px), a petición del
+      usuario, con el texto encima y el logo debajo (confirmado con AskUserQuestion antes
+      de implementar, frente a logo-arriba-texto-abajo o logo-al-lado)
+      — js/layout.js: cada <a> de .footer__links pasa de solo texto a
+        <span>Texto</span> + <img class="footer__link-logo">, usando los logos ya
+        existentes en assets/img/logos/: ArtstationLogo.png, Github_logo.png,
+        Linkedin.png (los mismos que ya usa contact.html para ArtStation/LinkedIn)
+      — GitHub_logo.png es un icono oscuro (invisible sobre el fondo negro del sitio) —
+        se le aplica filter:brightness(0) invert(1) vía clase
+        .footer__link-logo--white, igual que el filtro "logo-white" ya usado en
+        skill-card/project-item/modal para otros iconos oscuros (tyFlow, ZBrush, Unity)
+      — ArtstationLogo.png y Linkedin.png no llevan filtro, igual que en contact.html,
+        porque sus colores originales ya se leen bien sobre fondo oscuro
+      — CSS: nueva regla base .footer__link-logo{display:none} (por defecto, para no
+        afectar a móvil/tablet ≤768px, que sigue mostrando solo el texto como antes);
+        dentro del mismo @media(min-width:769px) del cambio anterior, se sobrescribe a
+        display:block y .footer__links a pasa a flex-direction:column (texto arriba,
+        logo debajo, centrados) — el alt="" de las imágenes queda vacío a propósito
+        (decorativo: el nombre del enlace ya está en el <span> visible, evita que un
+        lector de pantalla anuncie el texto dos veces)
+      — Tamaño del texto del enlace subido de 0.85rem a 0.95rem (petición del usuario de
+        "un poco más grande" sobre el cambio anterior de esta misma sesión); gap entre
+        enlaces de 2rem a 2.5rem para dar aire a la columna logo+texto
+      — Logo con opacidad 0.75 en reposo y 1 en hover del enlace, mismo criterio visual
+        que otros hovers del sitio (dock de logos de projects.html, por ejemplo)
+  ✓ Enlace de descarga de CV en about.html (columna izquierda, escritorio ≥901px — en
+      móvil/tablet ≤900px ya estaba oculto con display:none desde sesión 14, sin cambios
+      ahí) rehecho para que sea igual al de contact.html, a petición del usuario
+      — Bug encontrado de paso (motivo real de que el usuario pidiera "arreglar" el
+        enlace, no solo re-estilizarlo): el href apuntaba a
+        assets/cv-alvaro-garcia.pdf, un archivo que no existe en el proyecto — el CV
+        real está en assets/documents/CV/CV_ALVARO_GOMEZ_2026.pdf (la misma ruta que ya
+        usan index.html y contact.html). Corregido
+      — Markup: el <a class="btn btn--outline"> con flecha+texto en una sola línea se
+        sustituye por la misma estructura que ya usa contact.html —
+        <a class="contact__link"> con <span class="contact__link__icon">↓</span> +
+        <div> con contact__link__label ("CV") y contact__link__val (i18n
+        contact.cv.val, ya existente y bilingüe: "Descargar CV (PDF)" / "Download CV
+        (PDF)") — se reutiliza el mismo data-i18n que contact.html en vez de crear uno
+        nuevo; el label "CV" se deja sin data-i18n, igual que en contact.html (no está
+        traducido ahí tampoco, "CV" es igual en ambos idiomas)
+      — Clave about.cv eliminada de TRANSLATIONS (js/main.js, ES y EN): quedó huérfana
+        al quitar el <a data-i18n="about.cv"> anterior y no la usa ningún otro elemento
+      — .contact__link ya es una clase independiente de .contact__links (el contenedor
+        de la lista en contact.html) — no necesita ese wrapper para funcionar, así que
+        se pudo insertar directamente dentro del .about__cv existente sin más cambios
+        de CSS. El icono hereda var(--accent) del bloque <style> de cada página, así que
+        en about.html sale en verde esmeralda (su acento) en vez del azul de contact.html,
+        igual que el resto de elementos temáticos por página del sitio
+      — .about__cv { margin-top: 1.75rem } y el display:none en móvil (≤900px) ya
+        existentes no se han tocado
+  ✓ Nueva página privacy.html (Política de Privacidad), a petición del usuario tras
+      preguntar si el uso de Umami + el formulario de contacto requerían aviso legal
+      — Formato elegido con AskUserQuestion: página dedicada (no modal, no nota suelta),
+        siguiendo el mismo patrón que el resto del sitio (mismo <head>, nav y footer
+        compartidos vía layout.js, bloque <style> propio con --accent, Umami incluido)
+      — No se ha añadido al nav principal (index/projects/skills/about/contact): es una
+        página de utilidad, solo accesible desde el nuevo enlace "Privacidad" del footer
+      — --accent de esta página: #b8955a (el valor por defecto de :root en style.css),
+        declarado explícitamente en su bloque <style> igual que hacen las demás páginas,
+        en vez de reutilizar el acento de una sección concreta del portfolio
+      — Contenido en 5 bloques (título t-h1 + fecha de última actualización arriba):
+        Responsable del tratamiento · Formulario de contacto (qué datos, cómo se
+        procesan vía Google Apps Script/Gmail sin base de datos, base legal:
+        consentimiento) · Analítica web (qué es Umami, sin cookies, IP hasheada a
+        diario, tercero: Umami Software Inc./cloud.umami.is) · Tus derechos (acceso/
+        rectificación/supresión vía email; los datos de analítica son anónimos y no se
+        pueden asociar a una persona) · Cambios en esta política
+      — Bilingüe vía el sistema data-i18n existente: cada bloque de texto vive en un
+        <div data-i18n="privacy.*.body"> cuyo innerHTML completo (incluye los <p> y los
+        enlaces <a href="mailto:...">) se sustituye al cambiar de idioma — mismo patrón
+        ya usado en las descripciones de proyecto (data-desc), que también admiten HTML
+      — CSS nuevo: bloque "PRIVACY PAGE" en style.css (antes de FOOTER) —
+        .privacy-content limita el ancho de lectura a 70ch dentro del .container ya
+        existente (que sigue centrando y dando el padding lateral); .privacy-section
+        con separación entre bloques y h2 en font-display; enlaces con var(--accent) y
+        subrayado, mismo criterio que el resto del sitio
+      — Enlace "Privacidad" añadido al footer compartido (js/layout.js), fuera de
+        .footer__links (no lleva logo, no es una red social) — en escritorio (≥769px)
+        ocupa la 3ª columna del grid ya creado en esta sesión (grid-column:3;
+        justify-self:end), quedando simétrico con el copyright a la izquierda y los
+        enlaces sociales centrados; en móvil (≤640px) se apila igual que el resto
+        (flex-direction:column;text-align:center ya existente, sin cambios ahí)
+      — Nueva clave footer.privacy ("Privacidad"/"Privacy") junto a footer.copy en
+        TRANSLATIONS (js/main.js)
+  ✓ Botón de idioma del nav (#langToggle / .nav__lang) más grande en escritorio, a
+      petición del usuario ("se ve muy pequeño") — regla nueva dentro de
+      @media(min-width:769px), justo después de .nav__lang:hover, para no afectar al
+      móvil (que ya lo tenía visible y a su propio tamaño desde una sesión anterior)
+  ✓ README.md reescrito: el usuario preguntó quién lo había escrito y si estaba
+      actualizado (visible públicamente en la portada del repo de GitHub,
+      github.com/AlvaroGomezExposito/Portfolio) — resultó ser una plantilla genérica del
+      commit inicial (24 jun 2026), nunca personalizada: título "Álvaro García" (nombre
+      incorrecto), ruta de CV rota (la misma ya corregida en about.html esta sesión),
+      estructura de carpetas y atributos data-* obsoletos, y sugerencias de
+      Formspree/EmailJS/Web3Forms para "que el formulario funcione de verdad" cuando ya
+      funciona vía Google Apps Script desde hace semanas
+      — A petición del usuario, contenido reducido a lo mínimo: nombre real, una línea
+        de descripción y el enlace a la web en vivo
+        (https://alvarogomezexposito.github.io/Portfolio/) en primer plano — objetivo
+        explícito: que un visitante del repo vaya directo al enlace en vez de encontrarse
+        documentación técnica nada más entrar
+      — No se ha creado ninguna documentación técnica alternativa en otro archivo: el
+        usuario solo pidió que este archivo fuera mínimo y correcto, no reemplazar su
+        contenido por otro sitio
 
 Novedades sesión 14 (septiembre 2026):
   ✓ Título y subtítulo de las tarjetas de projects.html ahora siempre visibles en móvil

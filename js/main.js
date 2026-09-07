@@ -94,7 +94,6 @@ const TRANSLATIONS = {
     'about.tag.versatility':     'Versatilidad',
     'about.tag.proactivity':     'Proactividad',
     'about.tag.passion3d':       'Pasión por el desarrollo 3D y la tecnología',
-    'about.cv':      'Descargar CV',
 
     'contact.eyebrow':          'Hablemos',
     'contact.title':            'Contacto',
@@ -113,6 +112,22 @@ const TRANSLATIONS = {
 
     'gallery.download': 'Descargar',
 
+    'privacy.eyebrow': 'Legal',
+    'privacy.title':   'Política de Privacidad',
+    'privacy.sub':     'Cómo se recogen, usan y protegen tus datos al visitar este portfolio.',
+    'privacy.updated': 'Última actualización: septiembre de 2026',
+    'privacy.controller.title': 'Responsable del tratamiento',
+    'privacy.controller.body':  '<p>Álvaro Gómez Expósito es el responsable del tratamiento de los datos recogidos a través de este sitio web. Para cualquier consulta relacionada con esta política o tus datos personales, puedes escribir a <a href="mailto:alvarogomez0402@gmail.com">alvarogomez0402@gmail.com</a>.</p>',
+    'privacy.contact.title': 'Formulario de contacto',
+    'privacy.contact.body':  '<p>Al enviar el formulario de la sección Contacto, se recogen tu nombre, email y el mensaje que escribas. Estos datos se usan únicamente para responder a tu consulta y no se ceden a terceros con fines comerciales.</p><p>El envío se procesa mediante Google Apps Script, que reenvía el mensaje directamente a mi correo de Gmail — no se guarda ninguna copia en una base de datos. Google actúa aquí como proveedor técnico (encargado del tratamiento) para el envío del correo.</p><p>La base legal de este tratamiento es tu consentimiento, otorgado voluntariamente al rellenar y enviar el formulario.</p>',
+    'privacy.analytics.title': 'Analítica web',
+    'privacy.analytics.body':  '<p>Este sitio usa <a href="https://umami.is" target="_blank" rel="noopener">Umami</a> para obtener estadísticas de uso anónimas (páginas visitadas, procedencia del tráfico, etc.). Umami no usa cookies ni almacena información en tu navegador.</p><p>El identificador de visita se genera a partir de un hash de tu IP, navegador y este dominio, que se recalcula cada día — no se guarda tu IP y no es posible identificarte individualmente a partir de estos datos.</p><p>El servicio de analítica está alojado por Umami Software Inc. (cloud.umami.is), que actúa como encargado del tratamiento de estos datos anonimizados.</p>',
+    'privacy.rights.title': 'Tus derechos',
+    'privacy.rights.body':  '<p>Puedes solicitar acceso, rectificación o supresión de los datos personales que hayas enviado a través del formulario de contacto, escribiendo a <a href="mailto:alvarogomez0402@gmail.com">alvarogomez0402@gmail.com</a>.</p><p>Los datos de analítica web son anónimos, por lo que no es posible asociarlos a una persona concreta ni atender solicitudes individuales sobre ellos.</p>',
+    'privacy.changes.title': 'Cambios en esta política',
+    'privacy.changes.body':  '<p>Esta política puede actualizarse si cambian las herramientas o el tratamiento de datos del sitio. La fecha de la última actualización aparece al principio de esta página.</p>',
+
+    'footer.privacy': 'Privacidad',
     'footer.copy': '© 2025 Álvaro Gómez Expósito. Todos los derechos reservados.',
   },
   en: {
@@ -205,7 +220,6 @@ const TRANSLATIONS = {
     'about.tag.versatility':     'Versatility',
     'about.tag.proactivity':     'Proactivity',
     'about.tag.passion3d':       'Passion for 3D development and technology',
-    'about.cv':      'Download CV',
 
     'contact.eyebrow':          'Get in touch',
     'contact.title':            'Contact',
@@ -224,6 +238,22 @@ const TRANSLATIONS = {
 
     'gallery.download': 'Download',
 
+    'privacy.eyebrow': 'Legal',
+    'privacy.title':   'Privacy Policy',
+    'privacy.sub':     'How your data is collected, used and protected when you visit this portfolio.',
+    'privacy.updated': 'Last updated: September 2026',
+    'privacy.controller.title': 'Data controller',
+    'privacy.controller.body':  '<p>Álvaro Gómez Expósito is the controller responsible for the data collected through this website. For any question about this policy or your personal data, you can write to <a href="mailto:alvarogomez0402@gmail.com">alvarogomez0402@gmail.com</a>.</p>',
+    'privacy.contact.title': 'Contact form',
+    'privacy.contact.body':  '<p>Submitting the form on the Contact page collects your name, email and the message you write. This data is used only to reply to your enquiry and is never shared with third parties for commercial purposes.</p><p>The submission is processed through Google Apps Script, which forwards the message directly to my Gmail inbox — no copy is stored in any database. Google acts here as a technical provider (data processor) for delivering the email.</p><p>The legal basis for this processing is your consent, given voluntarily when you fill in and submit the form.</p>',
+    'privacy.analytics.title': 'Web analytics',
+    'privacy.analytics.body':  '<p>This site uses <a href="https://umami.is" target="_blank" rel="noopener">Umami</a> to gather anonymous usage statistics (pages visited, traffic sources, etc.). Umami does not use cookies or store information in your browser.</p><p>The visit identifier is generated from a hash of your IP, browser and this domain, recalculated every day — your IP is not stored and you cannot be individually identified from this data.</p><p>The analytics service is hosted by Umami Software Inc. (cloud.umami.is), which acts as processor for this anonymized data.</p>',
+    'privacy.rights.title': 'Your rights',
+    'privacy.rights.body':  '<p>You can request access to, correction of, or deletion of any personal data you submitted through the contact form by writing to <a href="mailto:alvarogomez0402@gmail.com">alvarogomez0402@gmail.com</a>.</p><p>Web analytics data is anonymous, so it cannot be linked to a specific person or matched to individual requests.</p>',
+    'privacy.changes.title': 'Changes to this policy',
+    'privacy.changes.body':  '<p>This policy may be updated if the tools or data processing on this site change. The date of the last update appears at the top of this page.</p>',
+
+    'footer.privacy': 'Privacy',
     'footer.copy': '© 2025 Álvaro Gómez Expósito. All rights reserved.',
   }
 };
