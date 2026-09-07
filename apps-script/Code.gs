@@ -25,6 +25,26 @@ function doPost(e) {
   var name = e.parameter.name || '(sin nombre)';
   var email = e.parameter.email || '(sin email)';
   var msg = e.parameter.msg || '(sin mensaje)';
+  var honeypot = e.parameter.website || '';
+
+  // Honeypot: campo oculto en el formulario que solo rellenan los bots.
+  // Si viene relleno, se responde "success" sin enviar nada, para no
+  // delatar el filtro (el bot cree que su envío funcionó).
+  if (honeypot.trim() !== '') {
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // Validación de formato del email. El frontend (js/main.js) ya valida
+  // antes de enviar, pero esto es necesario porque cualquiera puede saltarse
+  // el JS y mandar un POST directo a esta URL.
+  var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email.trim())) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: 'error', reason: 'invalid_email' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 
   var subject = 'Nuevo mensaje de contacto — ' + name;
   var body =

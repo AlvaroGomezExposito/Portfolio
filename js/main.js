@@ -102,6 +102,7 @@ const TRANSLATIONS = {
     'contact.name':             'Nombre',
     'contact.email':            'Email',
     'contact.email.placeholder':'tu@email.com',
+    'contact.email.invalid':    'Introduce un email válido (ejemplo: tu@email.com)',
     'contact.msg':              'Mensaje',
     'contact.send':             'Enviar mensaje →',
     'contact.success':          'Mensaje enviado. ¡Te contesto pronto!',
@@ -212,6 +213,7 @@ const TRANSLATIONS = {
     'contact.name':             'Name',
     'contact.email':            'Email',
     'contact.email.placeholder':'your@email.com',
+    'contact.email.invalid':    'Enter a valid email (e.g. your@email.com)',
     'contact.msg':              'Message',
     'contact.send':             'Send message →',
     'contact.success':          'Message sent. I\'ll get back to you soon!',
@@ -545,6 +547,9 @@ function initModal() {
 
     const tagsWrap = overlay.querySelector('.modal__tags');
     tagsWrap.innerHTML = (data.tags || '').split(',').map(t => `<span class="modal__tag">${t.trim()}</span>`).join('');
+    const logosWrap = overlay.querySelector('.modal__logos');
+    const sourceLogos = item.querySelector('.project-item__logos');
+    logosWrap.innerHTML = sourceLogos ? sourceLogos.innerHTML : '';
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -760,6 +765,8 @@ function initHeroSlideshow() {
 // URL cambia y hay que actualizarla aquí.
 const CONTACT_FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzQrNW2uInzSoJiPdO883zCqjnWyGqPFPem8_q3FMtar63xoZsTv7QLOjGVvJdXKkvJPg/exec';
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
@@ -768,7 +775,20 @@ function initContactForm() {
     e.preventDefault();
     const success = document.getElementById('formSuccess');
     const error = document.getElementById('formError');
+    const errorEmail = document.getElementById('formErrorEmail');
     if (error) error.style.display = 'none';
+    if (errorEmail) errorEmail.style.display = 'none';
+
+    // Honeypot: campo oculto que solo rellenan los bots. Si viene relleno,
+    // se descarta el envío sin avisar (ni éxito ni error) para no delatar el filtro.
+    const honeypot = document.getElementById('website');
+    if (honeypot && honeypot.value.trim()) return;
+
+    const emailInput = document.getElementById('email');
+    if (emailInput && !EMAIL_PATTERN.test(emailInput.value.trim())) {
+      if (errorEmail) errorEmail.style.display = 'block';
+      return;
+    }
 
     const formData = new FormData(form);
 

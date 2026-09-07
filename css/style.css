@@ -550,6 +550,12 @@ ul { list-style: none; }
 .filter-btn:hover { color: var(--text); border-color: var(--muted); }
 .filter-btn.active { color: var(--accent); border-color: var(--accent); background: var(--accent-dim); }
 
+@media (max-width: 768px) {
+  .projects-page { padding-bottom: 2.5rem; }
+  .filter-bar { gap: 0.47rem; margin-top: 0.94rem; }
+  .filter-btn { font-size: 0.625rem; padding: 0.34rem 0.75rem; }
+}
+
 /* Cinematic project item */
 .project-list { display: flex; flex-direction: column; gap: 2px; }
 
@@ -565,7 +571,6 @@ ul { list-style: none; }
   .project-item { aspect-ratio: 16/9; }
   .project-item__content { padding: 1.25rem; }
   .project-item__title { font-size: clamp(1.53rem, 3.4vw, 2.55rem); }
-  .project-item__desc { font-size: 0.81rem; }
 }
 
 .project-item__media {
@@ -728,6 +733,27 @@ ul { list-style: none; }
   color: var(--accent);
 }
 
+/* Sin hover en táctil: título y subtítulo deben verse siempre, anclados
+   abajo a la izquierda, sin depender de :hover (pensado para ratón).
+   Flecha y dock de logos se ocultan en la portada — su interacción es solo de
+   hover y en táctil nunca se vería; el dock se muestra en su lugar dentro del
+   modal del proyecto (.modal__logos), tras los tags. */
+@media (max-width: 768px) {
+  .project-item::after { opacity: 1; }
+  .project-item__left { max-width: 100%; }
+  .project-item__arrow,
+  .project-item__logos { display: none; }
+  .project-item__desc {
+    font-size: 0.65rem;
+    opacity: 1;
+    transform: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
 /* ============================================================
    PROJECT MODAL (lightbox)
    ============================================================ */
@@ -815,6 +841,24 @@ ul { list-style: none; }
   border: 1px solid var(--bg-line);
   border-radius: var(--radius);
   color: var(--muted);
+}
+.modal__logos {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--bg-line);
+}
+.modal__logos img {
+  height: 1.8rem;
+  width: auto;
+  max-width: 2.6rem;
+  object-fit: contain;
+}
+.modal__logos img.logo-white {
+  filter: brightness(0) invert(1);
 }
 /* Fullscreen image viewer */
 .img-fullscreen {
@@ -1050,6 +1094,23 @@ ul { list-style: none; }
   letter-spacing: 0.08em;
 }
 
+/* Móvil: 2 habilidades por línea (siempre, incluso en pantallas muy estrechas) */
+@media (max-width: 768px) {
+  .skills-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-top: 1.25rem; }
+  .skill-card { padding: 0.9rem; }
+  .skill-card__icon { margin-bottom: 0.5rem; }
+  .skill-card__icon img { width: 1.7rem; height: 1.7rem; }
+  .skill-card__icon img.logo-lg { width: 2.3rem; height: 2.3rem; }
+  .skill-card__name { font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .skill-card__cat { font-size: 0.62rem; letter-spacing: 0.06em; margin-bottom: 0.6rem; }
+  .skill-bar { margin-bottom: 0.3rem; }
+  .skill-level { font-size: 0.62rem; }
+  /* Estáticas en móvil: ya muestran su valor, sin depender de scroll/hover
+     (algunas se quedaban vacías porque el IntersectionObserver que activa
+     .animated no siempre llegaba a disparar) */
+  .skill-bar__fill { transform: scaleX(1); transition: none; }
+}
+
 /* === Skills category blocks === */
 .skills-cat-grid {
   display: grid;
@@ -1138,6 +1199,7 @@ ul { list-style: none; }
   top: calc(var(--nav-h) + 2rem);
 }
 .about__photo {
+  position: relative;
   aspect-ratio: 3/3.5;
   background: var(--bg-card);
   border: 1px solid var(--bg-line);
@@ -1153,6 +1215,7 @@ ul { list-style: none; }
   color: var(--muted);
   margin-top: 1rem;
 }
+.about__cv { margin-top: 1.75rem; }
 .about__text p { color: var(--muted); line-height: 1.8; margin-bottom: 1.5rem; font-size: 1.1rem; }
 .about__text p:first-of-type { font-size: 1.18rem; color: var(--text); }
 .about__divider { height: 1px; background: var(--bg-line); margin: 2.5rem 0; }
@@ -1228,6 +1291,13 @@ ul { list-style: none; }
 .form-group input:focus,
 .form-group textarea:focus { border-color: var(--accent); }
 .form-group textarea { min-height: 140px; }
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
 .form-success {
   display: none;
   font-family: var(--font-mono);
@@ -1280,6 +1350,10 @@ ul { list-style: none; }
 }
 .footer__links a:hover { color: var(--accent); }
 
+@media (max-width: 768px) {
+  .footer__links a { font-size: 0.81rem; }
+}
+
 /* ============================================================
    PLACEHOLDER IMAGES (gradient fills)
    ============================================================ */
@@ -1330,19 +1404,53 @@ ul { list-style: none; }
   .hero__inner { padding: 2.5rem 0; }
   .hero__stats { margin-top: 2rem; padding-top: 1.5rem; }
   .recent { padding: 2.5rem 0; }
-  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .about__photo-wrap { position: static; }
   .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .recent__grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* "Sobre mí" en móvil: foto pequeña arriba-izquierda, descripción a su derecha,
+   Experiencia y Formación debajo de la foto (en caja con borde fino), botón de CV
+   oculto, y Filosofía de trabajo a todo el ancho debajo de todo. */
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 0.62fr 1fr;
+    grid-template-areas:
+      "photo    bio"
+      "caption  bio"
+      "timeline bio"
+      "philosophy philosophy";
+    column-gap: 1.25rem;
+    row-gap: 1rem;
+  }
+  .about__photo-wrap,
+  .about__text { display: contents; }
+  .about__photo { grid-area: photo; }
+  .about__photo-caption { grid-area: caption; margin-top: 0.5rem; }
+  .about__cv { display: none; }
+  .about__bio { grid-area: bio; }
+  .about__bio p { font-size: 0.92rem; line-height: 1.65; margin-bottom: 1rem; }
+  .about__bio p:first-of-type { font-size: 0.98rem; }
+  .about__timeline-block {
+    grid-area: timeline;
+    border: 1px solid var(--bg-line);
+    border-radius: var(--radius);
+    padding: 0.9rem;
+  }
+  .about__philosophy { grid-area: philosophy; margin-top: 0.5rem; }
+  .about__divider { display: none; }
+  .timeline { gap: 1rem; }
+  .timeline__item { grid-template-columns: 1fr; gap: 0.15rem; }
+  .timeline__year { font-size: 0.68rem; }
+  .timeline__role { font-size: 0.82rem; margin-bottom: 0.1rem; }
+  .timeline__company { font-size: 0.66rem; }
+}
 @media (max-width: 640px) {
   .nav__links { display: none; }
   .nav__burger { display: flex; }
-  .nav__lang { display: none; }
   .hero__stats { flex-wrap: wrap; gap: 1.5rem; }
   .recent__grid { grid-template-columns: 1fr; }
   .footer__inner { flex-direction: column; text-align: center; }
-  .skills-grid { grid-template-columns: 1fr; }
 }
 
 /* ============================================================

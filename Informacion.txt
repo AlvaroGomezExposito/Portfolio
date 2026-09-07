@@ -1,6 +1,6 @@
 PORTFOLIO WEB — Documento de referencia
 
-Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 12)
+Álvaro Gómez Expósito · Actualizado: septiembre 2026 (sesión 14)
 
 
 REGLAS DE TRABAJO (leer siempre antes de tocar este proyecto)
@@ -135,9 +135,12 @@ Descripción del modal renderizada con .innerHTML (no .textContent) → permite 
 Dock de logos por proyecto en projects.html: fila de logos de las herramientas usadas, estilo
   "dock" de macOS (píldora traslúcida con blur, teñida en ámbar #c8832a), alineada a la
   izquierda bajo el título de cada tarjeta. Oculto por defecto; aparece con fade-in solo al
-  pasar el cursor sobre la tarjeta del proyecto. Al pasar el cursor sobre un logo, este se
-  amplía junto con sus vecinos inmediatos (efecto de magnificación tipo dock). Ver sección 16
-  para detalles técnicos y sección 5 para el listado de logos por proyecto.
+  pasar el cursor sobre la tarjeta del proyecto (comportamiento de escritorio, con ratón).
+  Al pasar el cursor sobre un logo, este se amplía junto con sus vecinos inmediatos (efecto
+  de magnificación tipo dock). En móvil (≤768px) este dock de la tarjeta se oculta (no hay
+  hover en táctil) y en su lugar se muestra el mismo listado de logos dentro del modal del
+  proyecto (.modal__logos), después de los tags — ver sección 16 para detalles técnicos y
+  sección 5 para el listado de logos por proyecto.
 
 
 5. PROYECTOS EN projects.html  (orden actual — 6 proyectos)
@@ -459,6 +462,10 @@ Completado:
   ✓ Espaciado vertical del hero de index.html reducido en móvil (≤900px): sin el
       hero__visual, el texto ya no queda flotando con exceso de aire arriba/abajo ni
       antes de "Trabajos recientes"
+  ✓ Título y subtítulo de las tarjetas de projects.html siempre visibles en móvil
+      (≤768px), anclados abajo a la izquierda, sin depender de :hover (ver sesión 14)
+  ✓ Formulario de contacto: validación de formato de email (regex) en cliente (js/main.js)
+      y en el backend (apps-script/Code.gs), más campo honeypot anti-bots — ver sesión 15
 Pendiente (Robot Armado):
   ▸ Crear carpeta assets/img/robot-armado/ con imagen de portada y UDIM layout (.webp)
   ▸ Crear carpeta assets/marmoset/robot-armado/ con el export del visor interactivo de Marmoset
@@ -469,9 +476,218 @@ Pendiente (Robot Armado):
 
 Pendiente (general):
   ▸ Dominio propio (opcional) — actualmente publicado en subdominio gratuito de GitHub Pages
-  ▸ En projects.html en móvil (≤768px), verificar que con el segundo intento (título y
-      subtítulo -15% + padding reducido, manteniendo aspect-ratio 16/9) ya no se corte
-      el texto en títulos largos — pendiente de confirmación del usuario
+  ▸ Redesplegar apps-script/Code.gs en script.google.com (nueva implementación) para que la
+    validación de email + honeypot del backend entre en vigor en la URL pública ya usada
+  ▸ Valorar aviso breve de privacidad cerca del formulario de contacto (RGPD/LOPDGDD): el
+    formulario ya recogía nombre+email+mensaje y los enviaba vía Google Apps Script/Gmail
+    antes de este cambio; no es un requisito nuevo introducido por la validación/honeypot,
+    pero sigue pendiente como buena práctica
+
+Novedades sesión 15 (septiembre 2026):
+  ✓ Preocupación del usuario: en contact.html se podía escribir cualquier texto en el campo
+      email y el mensaje se enviaba igualmente — causa: el <form> llevaba el atributo
+      novalidate, que desactiva toda la validación nativa del navegador (incluida la de
+      type="email"), y no había ninguna comprobación adicional en JS ni en el backend
+  ✓ Validación de formato de email añadida en dos capas (el cliente se puede saltar con un
+      POST directo al endpoint, así que hace falta también en el backend):
+      — js/main.js: EMAIL_PATTERN (regex /^[^\s@]+@[^\s@]+\.[^\s@]+$/) comprobado en
+        initContactForm() antes del fetch; si no matchea, se muestra el nuevo mensaje
+        #formErrorEmail (bilingüe, clave contact.email.invalid) y no se envía nada
+      — apps-script/Code.gs: mismo patrón de regex en doPost(); si el email no matchea,
+        devuelve { result:'error', reason:'invalid_email' } sin llamar a MailApp.sendEmail
+      — Nota: como el fetch usa mode:'no-cors' (limitación ya existente de Apps Script Web
+        Apps, no introducida en esta sesión), el frontend nunca lee esta respuesta del
+        backend — el rechazo del backend es una red de seguridad silenciosa para envíos que
+        se saltan el JS, no cambia el mensaje que ve un usuario legítimo (que ya queda
+        bloqueado antes por la validación del cliente)
+      — No se ha tocado el atributo novalidate del formulario (se mantiene) para controlar
+        el mensaje de error mostrado en vez de depender del tooltip nativo del navegador
+  ✓ Honeypot anti-bots añadido: campo oculto <input id="website" name="website"> dentro de
+      un div.hp-field, con aria-hidden="true" y tabindex="-1" para no interferir con
+      usuarios reales ni con navegación por teclado/lectores de pantalla
+      — Oculto con position:absolute + left/top:-9999px + opacity:0 (css/style.css), en vez
+        de display:none, porque algunos bots simples evitan rellenar campos con
+        display:none — con esta técnica el campo sigue "presente" para un bot que rellena
+        el formulario sin mirar el layout, pero invisible e inalcanzable para una persona
+      — js/main.js: si el campo llega relleno al enviar, se corta el envío sin hacer fetch
+        y sin mostrar ni éxito ni error (para no delatar el filtro a quien lo dispare)
+      — apps-script/Code.gs: misma comprobación en doPost() como red de seguridad si se
+        salta el JS; responde { result:'success' } sin enviar el email, para no revelar
+        al bot que fue detectado
+  ✓ Nuevo mensaje bilingüe contact.email.invalid en TRANSLATIONS (js/main.js) y nuevo div
+      #formErrorEmail en contact.html (misma clase .form-error ya existente, sin CSS nuevo)
+  ✓ Aclarado con el usuario (antes de implementar): ninguna validación de formato puede
+      confirmar que un email exista o pertenezca a quien lo escribe, solo que tenga forma
+      de email — para eso haría falta doble opt-in (correo de confirmación), fuera del
+      alcance pedido en esta sesión
+  ⚠ Pendiente acción manual del usuario: apps-script/Code.gs es solo código de referencia
+      (ver cabecera del archivo) — hay que pegar el archivo actualizado en script.google.com
+      y crear una nueva implementación para que la validación del backend entre en vigor en
+      la URL pública ya pegada en CONTACT_FORM_ENDPOINT (js/main.js)
+
+Novedades sesión 14 (septiembre 2026):
+  ✓ Título y subtítulo de las tarjetas de projects.html ahora siempre visibles en móvil
+      (≤768px), anclados en la esquina inferior izquierda de la tarjeta. Antes dependían
+      de :hover (pensado para ratón): en táctil el subtítulo, la flecha, el dock de logos
+      y el velo oscuro de fondo casi nunca llegaban a mostrarse porque un tap abre el
+      modal antes de que el :hover se active
+      — .project-item::after (velo oscuro) queda opacity:1 fijo en móvil, para legibilidad
+        del texto sobre cualquier imagen de portada, sin depender de hover
+      — .project-item__desc (subtítulo) queda opacity:1 / transform:none fijo en móvil
+      — .project-item__arrow y .project-item__logos (flecha y dock de logos) se ocultan
+        en móvil (display:none): su interacción es solo de hover y sin él no aportan nada,
+        y ocupaban espacio en el layout aunque fueran invisibles
+      — .project-item__left pasa de max-width:65% a 100% en móvil (ya no hay que dejar
+        hueco para la flecha), dando más ancho al título/subtítulo antes de que hagan wrap
+      — Salvaguarda anti-corte: .project-item__desc usa -webkit-line-clamp:3 en móvil, así
+        que si un subtítulo muy largo (p.ej. Robot Armado, 7 herramientas) no cupiera del
+        todo en una tarjeta muy baja (pantallas muy estrechas), trunca con "…" en vez de
+        cortarse a media línea/carácter contra el borde de la tarjeta (overflow:hidden)
+      — Regla nueva colocada al final del bloque CSS de .project-item (tras todas las
+        reglas :hover), no en el primer @media(max-width:768px) del archivo, para que
+        gane la cascada frente a las reglas base opacity:0 (mismo peso de especificidad,
+        gana la que aparece después en el archivo)
+  ✓ Tamaño del subtítulo (.project-item__desc) en móvil reducido a 0.65rem, para
+      igualarlo al de la categoría (.project-item__cat, texto arriba del título, ej.
+      "3D / Motion") — el usuario lo veía demasiado grande una vez hecho siempre visible
+      (cambio anterior de esta misma sesión)
+      — Primer intento fallido: font-size en el @media(max-width:768px) original (el que
+        ya existía al principio del bloque .project-item, antes de .project-item__media),
+        que queda ANTES de la regla base .project-item__desc { font-size: 0.95rem } sin
+        condición — con igual especificidad, gana la que aparece después en el archivo,
+        así que el 0.95rem base seguía imponiéndose y el usuario seguía viéndolo grande
+      — Fix definitivo: font-size:0.65rem movido al segundo @media(max-width:768px) del
+        bloque .project-item (el añadido para ocultar hover), que sí queda después de la
+        regla base en el archivo y gana la cascada
+  ✓ Dock de logos por proyecto: revertido el intento de mostrarlo siempre centrado en la
+      portada de la tarjeta en móvil (cambio anterior de esta sesión) — el usuario no lo
+      quería ahí. .project-item__logos vuelve a display:none en móvil (≤768px), igual que
+      la flecha; .project-item__desc vuelve a -webkit-line-clamp:3 (ya no hace falta dejar
+      hueco para el dock) y el gap de .project-item__content vuelve a su valor por defecto
+      (0.9rem, sin override)
+  ✓ Filtros de categoría en projects.html (Todo / 3D / Arq. / Arte digital / Games) en móvil
+      (≤768px): reducidos primero un 50% respecto al tamaño de escritorio, luego aumentados
+      un 25% sobre ese resultado (a petición del usuario tras verlos demasiado pequeños)
+      — Valores finales: .filter-btn font-size 0.625rem, padding 0.34rem 0.75rem;
+        .filter-bar gap 0.47rem, margin-top 0.94rem
+  ✓ Separación entre el último proyecto de projects.html y el footer, en móvil (≤768px):
+      .projects-page padding-bottom reducido de 6rem a 2.5rem (mismo valor que ya se usa
+      para recortar aire en otras secciones en móvil, sesión 13). El padding-top (6rem, el
+      espacio bajo el nav) no se toca — solo el hueco antes del footer
+  ✓ Enlaces del footer (ArtStation / GitHub / LinkedIn) aumentados un 25% en móvil (≤768px):
+      .footer__links a font-size 0.65rem → 0.81rem
+  ✓ Sección Habilidades (skills.html) en móvil (≤768px): 2 tarjetas de habilidad por línea,
+      siempre (confirmado con el usuario: 2 columnas también en móviles muy estrechos tipo
+      iPhone SE, en vez de caer a 1 columna por debajo de cierto ancho)
+      — .skills-grid: grid-template-columns pasa de auto-fill(280px) a repeat(2, 1fr); gap
+        1.5rem→0.6rem; margin-top 2rem→1.25rem
+      — .skill-card padding 1.75rem→0.9rem
+      — .skill-card__icon img 2.5rem→1.7rem (logo-lg 3.5rem→2.3rem)
+      — .skill-card__name font-size 1.35rem→0.9rem
+      — .skill-card__cat font-size 0.76rem→0.62rem
+      — .skill-level font-size 0.74rem→0.62rem
+      — Eliminada la regla previa @media(max-width:640px) .skills-grid{grid-template-
+        columns:1fr} (forzaba 1 columna en móvil estrecho) — ya no aplica, sustituida por
+        el bloque de 2 columnas de arriba
+      — No se tocaron los 3 iconos inline de la tarjeta "Version Control" (Motores de
+        Juego): llevan width/height:1.6rem por style="" inline, que tiene más
+        especificidad que cualquier regla de clase — ya son razonablemente pequeños y
+        caben sin problema en las 2 columnas, así que no hacía falta más
+  ✓ Barras de habilidad (.skill-bar__fill) estáticas en móvil (≤768px): ya muestran su
+      valor (width%) directamente, sin animación ni depender de scroll u hover
+      — Causa del bug reportado ("algunas se quedan vacías"): las barras normalmente
+        arrancan en transform:scaleX(0) y solo se rellenan cuando initSkillBars()
+        (js/main.js) detecta la tarjeta visible vía IntersectionObserver (threshold 0.3)
+        y le añade la clase .animated — con el nuevo grid de 2 columnas en móvil, algunas
+        tarjetas no llegaban a disparar ese observer de forma fiable y se quedaban vacías
+      — Fix: .skill-bar__fill { transform:scaleX(1); transition:none; } en móvil, dentro
+        del mismo bloque @media(max-width:768px) de la sección Habilidades — bypassa el
+        IntersectionObserver por completo en vez de depender de que dispare correctamente;
+        el JS (initSkillBars) se sigue ejecutando pero ya no tiene efecto visual en móvil
+  ✓ Botón de idioma (EN/ES) visible de nuevo en el nav en móvil (≤640px), a la izquierda de
+      las tres rayas del menú hamburguesa — ya estaba en esa posición en el HTML
+      (js/layout.js: dentro de .nav__controls, #langToggle va antes que #navBurger, en
+      fila), pero una regla @media(max-width:640px) .nav__lang{display:none} lo ocultaba
+      por completo en móvil; se eliminó esa línea, sin tocar nada más
+  ✓ Estructura de "Sobre mí" (about.html) rediseñada en móvil (≤900px), a petición del
+      usuario (antes la foto ocupaba el ancho completo, muy grande, y todo caía en una
+      sola columna vertical: foto, descripción, timeline, filosofía)
+      — Confirmado con el usuario (AskUserQuestion) antes de tocar el HTML: columna
+        izquierda = foto pequeña + pie de foto + Experiencia y Formación + botón
+        Descargar CV (en ese orden); columna derecha = descripción (p1/p2/p3);
+        Filosofía de trabajo a todo el ancho, debajo de las dos columnas
+      — HTML (about.html): se envolvieron en divs con clase los bloques que antes no la
+        tenían, sin cambiar su contenido ni el layout de escritorio — .about__bio
+        (envuelve p1/p2/p3, antes sueltos dentro de .about__text), .about__timeline-block
+        (envuelve el eyebrow "Experiencia" + .timeline, antes sueltos), .about__cv (ya
+        existía como div sin clase; se le quitó el style="margin-top" inline, movido a
+        CSS), .about__philosophy (ya existía como div sin clase, para la sección de tags)
+      — CSS: dentro de @media(max-width:900px), .about-grid pasa de 1 columna
+        (grid-template-columns:1fr, colapso total) a grid de 2 columnas (0.62fr 1fr) con
+        grid-template-areas ("photo bio" / "caption bio" / "timeline bio" / "cv bio" /
+        "philosophy philosophy"). .about__photo-wrap y .about__text (los dos
+        contenedores originales de escritorio) pasan a display:contents SOLO en este
+        media query — sus hijos se convierten en ítems directos del grid y se colocan
+        cada uno en su área con grid-area, sin mover nada en el DOM. Como
+        .about__photo-wrap ya perdía su position:sticky en móvil (regla previa de otra
+        sesión), aplicar display:contents ahí no cambia ningún comportamiento — el
+        escritorio (>900px) no se toca en absoluto, sigue con el mismo HTML/CSS de
+        siempre (foto sticky con caption y CV dentro, texto con bio+timeline+filosofía
+        apilados a la derecha)
+      — Tamaño de foto: ya no hace falta una regla de tamaño explícita — al pasar de
+        columna 1fr (ancho completo) a columna 0.62fr de un grid de 2, la foto se reduce
+        automáticamente porque su aspect-ratio (3/3.5) sigue el ancho de su columna
+      — Timeline adaptado al ancho estrecho de la columna izquierda (~120-150px en
+        móviles normales): .timeline__item pasa de 2 columnas (año | contenido) a 1 sola
+        columna apilada; fuentes reducidas (.timeline__year 0.88rem→0.68rem,
+        .timeline__role 1.05rem→0.82rem, .timeline__company 0.82rem→0.66rem)
+      — Párrafos de la descripción (.about__bio p) reducidos: 1.1rem→0.92rem (primer
+        párrafo 1.18rem→0.98rem), line-height 1.8→1.65, para ir acorde a la columna más
+        estrecha que antes (antes tenía el ancho completo en móvil)
+      — Los dos separadores (.about__divider) se ocultan en móvil (display:none): con el
+        contenido repartido en celdas de grid separadas ya no tiene sentido una línea
+        horizontal suelta entre bloques que ya no son vecinos visuales
+      — Efecto secundario menor, aceptado sin más: la animación de entrada fade-up de
+        .about__photo-wrap y .about__text (fadeUp, CSS @keyframes) deja de tener efecto
+        visual en móvil, porque display:contents no tiene caja propia sobre la que animar
+        opacity/transform — el contenido aparece directamente, sin fundido, solo en
+        móvil (en escritorio la animación sigue intacta)
+  ✓ Bug crítico corregido: tras el cambio anterior, en móvil solo se veía la foto,
+      enorme, tapando toda la página
+      — Causa: la <img> de la foto lleva position:absolute;inset:0 inline en el HTML,
+        pero .about__photo (su contenedor directo, el recorte con aspect-ratio) nunca
+        tuvo position:relative — el "contenedor de posicionamiento" real para esa imagen
+        siempre fue el ancestro posicionado más cercano hacia arriba en el árbol. Antes
+        era .about__photo-wrap (position:sticky en escritorio), y el overflow:hidden de
+        .about__photo disimulaba el problema recortando la imagen al tamaño visualmente
+        correcto por accidente. Al poner .about__photo-wrap en display:contents (cambio
+        de esta sesión, para el nuevo grid), ese ancestro posicionado desapareció por
+        completo, y la imagen pasó a posicionarse respecto al viewport entero (sin ningún
+        ancestro posicionado de por medio), cubriendo toda la pantalla
+      — Fix: position:relative añadido a .about__photo (regla base, sin media query) —
+        ahora la imagen se posiciona correctamente respecto a su propio contenedor
+        recortado en todos los casos, sin depender por accidente de ningún ancestro.
+        Sin cambios visuales en escritorio (el resultado ya era correcto ahí, solo que
+        por la razón equivocada)
+  ✓ Ajustes sobre la estructura anterior de "Sobre mí" en móvil (≤900px):
+      — .about__timeline-block (Experiencia y Formación, debajo de la foto) ahora va
+        dentro de una caja con borde fino (border:1px solid var(--bg-line),
+        border-radius:var(--radius), padding:0.9rem), para separarla visualmente
+      — .about__cv (el botón/cuadro de "Descargar CV") oculto en esta sección en móvil
+        (display:none) — sigue existiendo en el HTML y funcionando en escritorio, solo
+        se quita de la vista móvil de "Sobre mí"
+      — grid-template-areas de .about-grid actualizado: se quitó la fila "cv" (ya no
+        hace falta reservarle espacio)
+  ✓ Dock de logos añadido al modal de proyecto en su lugar (todas las resoluciones, no solo
+      móvil): nuevo contenedor .modal__logos en projects.html, justo después de
+      .modal__tags, dentro de .modal__body
+      — Se puebla en openModal() (js/main.js): copia el innerHTML de
+        item.querySelector('.project-item__logos') (los mismos <img> ya definidos por
+        proyecto en la tarjeta) a .modal__logos — no duplica datos, reutiliza el markup
+        existente de cada proyecto
+      — Estilo en css/style.css: fila de iconos con separador (border-top) respecto a los
+        tags, sin la píldora traslúcida ni la magnificación de hover de la versión de la
+        tarjeta (aquí va sobre fondo sólido del modal, no sobre una imagen)
 
 Novedades sesión 13 (septiembre 2026):
   ✓ Corregido espacio vertical excesivo en index.html en móvil (≤900px): al ocultarse

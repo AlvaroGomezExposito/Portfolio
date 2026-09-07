@@ -110,12 +110,21 @@
               <textarea id="msg" name="msg" data-i18n-placeholder="contact.msg" placeholder="Cuéntame tu proyecto..." required></textarea>
             </div>
 
+            <div class="hp-field" aria-hidden="true">
+              <label for="website">Website</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
             <div id="formSuccess" class="form-success" data-i18n="contact.success">
               Mensaje enviado. ¡Te contesto pronto!
             </div>
 
             <div id="formError" class="form-error" data-i18n="contact.error">
               No se pudo enviar el mensaje. Prueba de nuevo o escríbeme directamente a alvarogomez0402@gmail.com
+            </div>
+
+            <div id="formErrorEmail" class="form-error" data-i18n="contact.email.invalid">
+              Introduce un email válido (ejemplo: tu@email.com)
             </div>
 
             <button type="submit" class="btn btn--primary" data-i18n="contact.send">
